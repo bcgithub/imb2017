@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <h:panelGroup  layout="block" class="page-menu">
+        <ul class="dropdown-menu">
+
+            <h:form id="menu-form" prependId="false">
+            <li><h:commandLink id="accounts" action="accounts" title="#{msg.accountsText}" >#{msg.accountsText}
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+            <li><h:commandLink id="customers" action="customers" title="Customers" >Customers
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+            <li><h:commandLink id="role" action="role" title="role" >Role
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+            <li><h:commandLink id="device" action="device" title="device" >Device
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+            <li><h:commandLink id="transactions" action="transactions" title="Transactions" >Transactions
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+
+            <!-- Beneficiaries menu -->
+
+            <li><h:commandLink id="beneficiaries" action="beneficiaries" title="Beneficiaries" >Beneficiaries
+                <f:ajax ></f:ajax>
+            </h:commandLink></li>
+            </h:form>
+
+
+        </ul>
+    </h:panelGroup>
+</ui:composition>
