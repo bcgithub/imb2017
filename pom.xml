@@ -10,17 +10,18 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<sonar.host.url>http://192.168.44.199:9000</sonar.host.url>
+		<sonar.host.url>http://52.174.195.211:9000</sonar.host.url>
 		<sonar.jacoco.itReportPath>${basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
 		<sonar.jacoco.reportPath>${basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-		<sonar.core.codeCoveragePlugin>jacoco </sonar.core.codeCoveragePlugin>
+		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.language>java</sonar.language>
 		<jacoco.append>true</jacoco.append>
 		<version.payara.embedded>4.1.1.164</version.payara.embedded>
 		<version.valid4j>1.0</version.valid4j>
 		<version.arquillian>1.1.11.Final</version.arquillian>
+		<version.jacoco>0.7.4.201502262128</version.jacoco>
 	</properties>
 
 	<modules>
@@ -37,7 +38,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -59,11 +60,11 @@
 			<!-- use this for javax.persistence <snapshots> <enabled>true</enabled> 
 				</snapshots> -->
 		</repository>
-		<repository>
+		<!-- <repository>
 			<id>Glassfish</id>
 			<name>http://download.java.net/maven/glassfish</name>
 			<url>http://download.java.net/maven/glassfish</url>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>jboss-public-repository-group</id>
 			<name>JBoss Public Maven Repository Group</name>
@@ -150,35 +151,200 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<debug>true</debug>
 					<debuglevel>lines,vars,source</debuglevel>
 				</configuration>
 			</plugin>
-			<!-- <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				<version>0.7.1-SNAPSHOT</version> <configuration> <includes> <include>**/*</include> 
-				</includes> <excludes> <exclude>service/*</exclude> </excludes> <append>true</append> 
-				<propertyName>jacoco.agent.argLine</propertyName> default: argLine <excludes> 
-				<exclude>service.</exclude> </excludes> <destFile>${project.build.directory}/jacoco-ut.exec</destFile> 
-				<dataFile>${project.build.directory}/jacoco-integration.exec</dataFile> report 
-				</configuration> <executions> <execution> <id>pre-unit-test</id> <goals> 
-				<goal>prepare-agent</goal> </goals> <configuration> <destFile>${sonar.jacoco.reportPath}</destFile> 
-				<propertyName>surefire.argLine</propertyName> <includes> <include>com.bergcomputers.*</include> 
-				</includes> </configuration> </execution> <execution> <id>post-unit-test</id> 
-				<phase>test</phase> <goals> <goal>report</goal> </goals> <configuration> 
-				<dataFile>${sonar.jacoco.reportPath}</dataFile> <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory> 
-				<includes> <include>com.bergcomputers.*</include> </includes> </configuration> 
-				</execution> <execution> <id>pre-integration-test</id> <phase>pre-integration-test</phase> 
-				<goals> <goal>prepare-agent-integration</goal> </goals> <configuration> <destFile>${sonar.jacoco.itReportPath}</destFile> 
-				<propertyName>failsafe.argLine</propertyName> <excludes> <exclude>service.*</exclude> 
-				<exclude>service.*</exclude> </excludes> <includes> <include>com.bergcomputers.*</include> 
-				</includes> </configuration> </execution> <execution> <id>post-integration-test</id> 
-				<phase>post-integration-test</phase> <goals> <goal>report-integration</goal> 
-				</goals> <configuration> <dataFile>${sonar.jacoco.itReportPath}</dataFile> 
-				<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory> 
-				<includes> <include>com.bergcomputers.*</include> </includes> </configuration> 
-				</execution> </executions> </plugin> -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${version.jacoco}</version>
+				<configuration>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<excludes> <exclude>service/*</exclude> </excludes>
+					<append>true</append>
+					<propertyName>jacoco.agent.argLine</propertyName> 
+						<excludes> <exclude>service.</exclude> </excludes>
+					<destFile>${project.build.directory}/jacoco-ut.exec</destFile>
+					<dataFile>${project.build.directory}/jacoco-integration.exec</dataFile>
+						
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${sonar.jacoco.reportPath}</destFile>
+							<propertyName>surefire.argLine</propertyName>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${sonar.jacoco.reportPath}</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent-integration</goal>
+						</goals>
+						<configuration>
+							<destFile>${sonar.jacoco.itReportPath}</destFile>
+							<propertyName>failsafe.argLine</propertyName>
+							<excludes> <exclude>service.*</exclude> <exclude>service.*</exclude>
+								</excludes>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report-integration</goal>
+						</goals>
+						<configuration>
+							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <id>jacoco-initialize</id>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <destFile>${basedir}/target/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/jacoco-unit.exec</dataFile>
+                </configuration>
+                <version>${version.jacoco}</version>
+            </plugin> -->
+           <!-- <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.19.1</version>
+        </plugin> -->
+			<!-- <plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${version.jacoco}</version>
+				<configuration>
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<excludes>
+						<exclude>service/*</exclude>
+					</excludes>
+					<append>true</append>
+					<propertyName>jacoco.agent.argLine</propertyName>
+					
+					<excludes>
+						<exclude>service.</exclude>
+					</excludes>
+					<destFile>${project.build.directory}/jacoco-ut.exec</destFile>
+					<dataFile>${project.build.directory}/jacoco-integration.exec</dataFile>
+			
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${sonar.jacoco.reportPath}</destFile>
+							<propertyName>surefire.argLine</propertyName>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>${sonar.jacoco.reportPath}</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent-integration</goal>
+						</goals>
+						<configuration>
+							<destFile>${sonar.jacoco.itReportPath}</destFile>
+							<propertyName>failsafe.argLine</propertyName>
+							<excludes>
+								<exclude>service.*</exclude>
+								<exclude>service.*</exclude>
+							</excludes>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report-integration</goal>
+						</goals>
+						<configuration>
+							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
+							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+							<includes>
+								<include>com.bergcomputers.*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin> -->
 		</plugins>
 	</build>
 

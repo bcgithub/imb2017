@@ -4,189 +4,244 @@
  */
 package com.bergcomputers.bcibintegrationtest.rest;
 
+import static javax.ws.rs.client.Entity.json;
+import static org.junit.Assert.assertEquals;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.codehaus.jettison.json.JSONArray;
+import javax.inject.Inject;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.bergcomputers.domain.Currency;
 import com.bergcomputers.ejb.CurrencyController;
-import com.bergcomputers.rest.accounts.CurrencyResource;
-import com.bergcomputers.rest.activator.JaxRsActivator;
-
+import com.bergcomputers.ejb.ICurrencyController;
+import com.bergcomputers.rest.currency.CurrencyResource;
 /**
  *
- * @author Administrator
+ * @author Ionut
  */
-@RunWith(Arquillian.class)
-public class CurrencyWSTest extends AbstractTest{
-    final static String UrlBase = "http://localhost:"+"8181"+"/test/rest/";
-    private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+public class CurrencyWSTest extends AbstractTest {
 
-    @Deployment
-    public static Archive<?> createDeployment() {
-        return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addPackage(Currency.class.getPackage())
-            .addPackage(CurrencyController.class.getPackage())
-            .addPackage(JaxRsActivator.class.getPackage())
-            .addPackage(CurrencyResource.class.getPackage())
-            .addClass(JaxRsActivator.class)
-           // .addClass(CurrenciesResource.class)
-            .addClass(CurrencyResource.class)
-            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-            //.setWebXML("web.xml");
-    }
+	private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+	
+	private String serviceRelativePath = "currency/";
+	private String jsonFormat = "application/json";
+	
+	private GenericType<List<Currency>> genericListType = new GenericType<List<Currency>>() {};
 
-    @Test
-    public void getAccountsJSONArray(){
-            System.out.println("Getting list of accounts:");
-            JSONArray accounts = target("accounts/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-            System.out.println("-----");
-    }
-  /*  @Test
-    public void createAccount() throws JSONException{
-        System.out.println("Getting list of accounts:");
-            JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-            System.out.println("-----");
-        // add a new user
+	private String symbol = "USD";
+	private Double exchangeRate = 4.0D;
+	private Date creationDate = new Date();
+	
+	 @Inject
+	 private ICurrencyController currencyContoller;
+	 
+	@Deployment
+	public static WebArchive createDeployment() {
+		return buildArchive().addPackage(CurrencyResource.class.getPackage()).addPackage(Currency.class.getPackage())
+				.addPackage(CurrencyController.class.getPackage()).addClass(CurrencyResource.class);
+	}
 
-            System.out.println("Creating test account:");
-            JSONObject account = new JSONObject();
-            account.put("iban", "RO01BC1234")
-             	   .put("amount", 1000.0);
-            wr.path("accounts").type("application/json").put(account.toString());
-            System.out.println("-----");
+	/**
+	 * Test if we obtain the list of all currencies
+	 */
+	@Test
+	@RunAsClient
+	public void getCurrenciesTest() {
+		Currency created = createCurrency();
+		List<Currency> currencies = target(serviceRelativePath).accept(jsonFormat).get(genericListType);
+		assertEquals(1, currencies.size());
+		
+		//Deleting test currency
+		deleteCurrency(created.getId());
 
-            // make sure it was added
+	}
+	
+	/**
+	 * Test if we obtain the paginated list of all currencies
+	 */
+	@Test
+	@RunAsClient
+	public void getCurrenciesPaginationTest() {
+		Currency created1 = createCurrency();
+		Currency created2 = createCurrency();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", 1);
+        params.put("size", 1);
+        
+		List<Currency> currencies = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, currencies.size());
+		assertEquals(created1.getId(), currencies.get(0).getId());
+        params.put("page", 2);
+        currencies = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, currencies.size());
+		assertEquals(created2.getId(), currencies.get(0).getId());
+		
+		//Deleting test currency
+		deleteCurrency(created1.getId());
+		deleteCurrency(created2.getId());
 
-            System.out.println("Getting list of accounts:");
-            accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-            System.out.println("-----");
+	}
 
-             System.out.println("Deleting test account:");
+	/**
+	 * Test if a currency is created
+	 */
+	@Test
+	@RunAsClient
+	public void createCurrencyTest() {
+				
+		//existing currencies
+		List<Currency> currencies = getCurrencies();
 
-            wr.path("accounts/"+accounts.getJSONObject(0).get("id")).delete();
-            //c.resource((String)accounts.get(0)).delete();
-            System.out.println("-----");
+		//Creating test currency
+		Currency currency = createCurrencyEntity();
+		Response resp = target(serviceRelativePath).post(json(currency));
+		Currency created = resp.readEntity(Currency.class);
 
-    }
+		//Getting list of currencies
+		List<Currency> currenciesNewList = getCurrencies();
+		
+		//check the list size to be increased by one
+		assertEquals(currencies.size() +1, currenciesNewList.size() );
+		
+		assertEquals(currency.getSymbol(), created.getSymbol());
+		assertEquals(currency.getExchangerate(), created.getExchangerate());
+		assertEquals(currency.getCreationDate(), created.getCreationDate());
+		
+		//Deleting test currency
+		deleteCurrency(currenciesNewList.get(0).getId());
 
-        @Test
-    public void updateAccount() throws JSONException{
-        System.out.println("Getting list of accounts:");
-        JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-        System.out.println("-----");
-        // add a new account
+	}
+	
+	/**
+	 * Test if a currency can be obtained by its id
+	 */
+	@Test
+	@RunAsClient
+	public void getCurrencyTest() {
+				
+		//Creating test currency
+		Currency currency = createCurrencyEntity();
+		Response resp = target(serviceRelativePath).post(json(currency));
+		Currency created = resp.readEntity(Currency.class);
+		
+		resp = target(serviceRelativePath+created.getId()).get();
+		Currency obtained = resp.readEntity(Currency.class);
+		
+		assertEquals(obtained.getId(), created.getId());
+		assertEquals(obtained.getSymbol(), created.getSymbol());
+		assertEquals(obtained.getExchangerate(), created.getExchangerate());
+		assertEquals(obtained.getCreationDate(), created.getCreationDate());
+		
+		//Deleting test currency
+		deleteCurrency(created.getId());
 
-        System.out.println("Creating test account:");
-        JSONObject account = new JSONObject();
-        account.put("iban", "ro03bc1234").put("amount", 2000.0);
-        account = wr.path("accounts").type("application/json").put(JSONObject.class, account);
-        System.out.println("---created --"+account);
+	}
+	
+	/**
+	 * 
+	 * Test if a currency is updated 
+	 */
+	@Test
+	@RunAsClient
+	public void updateCurrencyTest() {
+		Double newRate = 3.0d;
+		String newSymbol = "EUR";
+		Date newCreation = new Date();
+		
+		//Creating test currency
+		Currency currency = createCurrency();
 
-        // make sure it was added
+		currency.setExchangerate(newRate);
+		currency.setSymbol(newSymbol);
+		currency.setCreationDate(newCreation);
+		
+		Response resp = target(serviceRelativePath).put(json(currency));
+		Currency updated = resp.readEntity(Currency.class);
+		
+		assertEquals(currency.getId(), updated.getId());
+		assertEquals(newSymbol, updated.getSymbol());
+		assertEquals(newRate, updated.getExchangerate());
+		assertEquals(newCreation, updated.getCreationDate());
+		
+		//Deleting test currency
+		deleteCurrency(currency.getId());
 
-        System.out.println("Getting list of accounts:");
-        accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-        System.out.println("-----");
+	}
+	
+	/**
+	 *	Test if a currency is deleted 
+	 * 
+	 */
+	@Test
+	@RunAsClient
+	public void deleteCurrencyTest() {
+		// Creating test currency
+		createCurrency();
+		
+		// existing currencies
+		List<Currency> currencies = getCurrencies();
+		
+		
+		//delete test currency
+		target(serviceRelativePath + currencies.get(0).getId()).delete();
+		
+		// new currencies list
+		List<Currency> currenciesNewList = getCurrencies();
+		
+		//check the list size to be decrease by one
+		assertEquals(currencies.size() - 1, currenciesNewList.size() );
 
-
-        //update the account
-        System.out.println("Updating test account:");
-        account.put("iban", "ro04bc1234").put("amount", 2100.0);
-        account = wr.path("accounts/"+account.get("id")).type("application/json").post(JSONObject.class, account);
-        System.out.println("-----Updated "+account);
-
-        System.out.println("Getting list of accounts:");
-        accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-        System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-        System.out.println("-----");
-
-
-        System.out.println("Deleting test account:");
-        wr.path("accounts/"+account.get("id")).delete();
-        System.out.println("-----");
-
-    }
-
-    @Test
-    public void deleteAccount() throws JSONException{
-
-        // add a new account
-
-            System.out.println("Creating test account:");
- 
-            Account acc = new Account();
-            acc.setIban("RO02BC1678");
-            acc.setAmount(500.0);
-            acc.setCreationDate(new Date());
-            Account account = wr.path("accounts").type("application/json").put(Account.class, acc);
-            System.out.println("-----");
-
-            // make sure it was added
-
-            System.out.println("Getting list of accounts:");
-            JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-            System.out.println("-----");
-
-             System.out.println("Deleting test account:");
-            wr.path("accounts/"+account.getId()).delete();
-            System.out.println("-----");
-
-            System.out.println("Getting list of accounts:");
-            accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-            System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-            System.out.println("-----");
-
-    }
-    @Test
-   public void getAccountDetails() throws JSONException{
-       System.out.println("Getting list of accounts:");
-       JSONArray accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-       System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-       System.out.println("-----");
-       // add a new account
-
-       System.out.println("Creating test account:");
-       Account acc = new Account();
-       acc.setAmount(2000.0);
-       acc.setIban("ro03bc1234");
- 
-       Account account = wr.path("accounts").type("application/json").put(Account.class, acc);
-       //wr.path("accounts").type("application/json").put(JSONObject.class, account);
-       System.out.println("---created --"+account);
-
-       // make sure it was added
-       Account accountEntity = wr.path("accounts/detail/"+account.getId()).accept("application/json").get(Account.class);
-       Assert.assertEquals(account.getId(), accountEntity.getId());
-       System.out.println("Getting list of accounts:");
-       accounts = wr.path("accounts/").accept("application/json").get(JSONArray.class);
-       System.out.println(String.format("List of accounts found:\n%s", accounts.toString()));
-       System.out.println("-----");
-
-
-
-
-       System.out.println("Deleting test account:");
-       wr.path("accounts/"+account.getId()).delete();
-       System.out.println("-----");
-
-   }*/
+	}
+	
+	/**
+	 * 
+	 * @return the created entity pojo
+	 */
+	private Currency createCurrencyEntity(){
+		Currency currency = new Currency();
+		currency.setExchangerate(exchangeRate);
+		currency.setSymbol(symbol);
+		currency.setCreationDate(creationDate);
+		return currency;
+	}
+	
+	/**
+	 * 
+	 * @return the created entity in the database
+	 */
+	private Currency createCurrency(){
+		Currency currency = createCurrencyEntity();
+		Response resp = target(serviceRelativePath).post(json(currency));
+		Currency created = resp.readEntity(Currency.class);
+		return created;
+	}
+	
+	/**
+	 * 
+	 * @return list of existing currencies in the database
+	 */
+	private List<Currency> getCurrencies(){
+		return target(serviceRelativePath).accept(jsonFormat).get(genericListType);
+	}
+	
+	/**
+	 * Deletes the specified entity from db
+	 * 
+	 * @param id
+	 */
+	private void deleteCurrency(Long id){
+		target(serviceRelativePath + id).delete();
+	}
 }

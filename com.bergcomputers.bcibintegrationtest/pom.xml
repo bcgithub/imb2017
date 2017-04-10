@@ -17,12 +17,15 @@
 		<arquillian_persistence.version>1.0.0.Alpha5</arquillian_persistence.version>
 		<ejb.version>3.1</ejb.version>
 		<jpa.version>2.0.0</jpa.version>
-		<eclipselink.version>2.3.2</eclipselink.version>
+		<eclipselink.version>2.6.4</eclipselink.version>
 		<maven.compiler.plugin.version>2.5.1</maven.compiler.plugin.version>
 		<version.payara.arquillian>1.0.0.Final</version.payara.arquillian>
         <version.jersey>2.24</version.jersey>
         <version.payara.embedded>4.1.1.164</version.payara.embedded>
-	</properties>
+        <version.jackson>2.7.5</version.jackson>
+        <version.shrinkwrap>2.2.6</version.shrinkwrap>
+        
+ 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -94,11 +97,6 @@
                     </dependency>
                 </dependencies>
             </dependencyManagement>
-            <properties>
-                <version.payara.arquillian>1.0.0.Final</version.payara.arquillian>
-                <version.jersey>2.24</version.jersey>
-                <version.payara.embedded>4.1.1.164</version.payara.embedded>
-            </properties>
         </profile>
 	</profiles>
 	<dependencies>
@@ -117,7 +115,7 @@
 			<artifactId>com.bergcomputers.bcibrestws</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.ejb</artifactId>
 			<version>${ejb.version}</version>
@@ -133,7 +131,7 @@
 			<artifactId>javax.persistence</artifactId>
 			<version>${jpa.version}</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -145,6 +143,7 @@
 			<artifactId>eclipselink</artifactId>
 			<version>${eclipselink.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.jboss.arquillian.junit</groupId>
 			<artifactId>arquillian-junit-container</artifactId>
@@ -172,6 +171,34 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api</artifactId>
+            <version>${version.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+            <version>${version.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>${version.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>

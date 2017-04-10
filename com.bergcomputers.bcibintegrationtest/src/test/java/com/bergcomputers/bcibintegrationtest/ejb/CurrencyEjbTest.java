@@ -34,7 +34,7 @@ import com.bergcomputers.ejb.ICurrencyController;
 public class CurrencyEjbTest {
 
 	@EJB
-	private ICurrencyController accountController;
+	private ICurrencyController currencyController;
 
 	@Deployment
     public static Archive<?> createDeployment() {
@@ -55,12 +55,12 @@ public class CurrencyEjbTest {
 
 
     @Test
-    @UsingDataSet("datasets/TwoAccounts.xml")
+    @UsingDataSet("datasets/TwoCurrencies.xml")
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.USED_TABLES_ONLY)
-    public void shouldFindAllGamesUsingJpqlQuery() throws Exception {
-    	Currency result = accountController.findCurrency(6L);
+    public void findOneCurrencyUsingJpqlQuery() throws Exception {
+    	Currency result = currencyController.find(1L);
    	    assertNotNull(result);
-    	assertEquals("$", result.getSymbol());
-   	    assertEquals(new Double(1.0), result.getExchangerate());
+    	assertEquals("USD", result.getSymbol());
+   	    assertEquals(new Double(4.0), result.getExchangerate());
     }
 }

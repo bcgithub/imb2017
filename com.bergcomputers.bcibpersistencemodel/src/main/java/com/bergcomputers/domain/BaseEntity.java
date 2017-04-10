@@ -16,7 +16,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-//import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -30,9 +29,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class BaseEntity implements Serializable, IBaseEntity {
 
+	public static final String findAll = "com.bergcomputers.domain.baseentity.findAll";
 
 	private static final long serialVersionUID = -7944505705705785135L;
-	public final static String findAll = "com.bergcomputers.domain.baseentity.findAll";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,38 +52,40 @@ public class BaseEntity implements Serializable, IBaseEntity {
 		super();
 	}
 
-
+	
+	@Override
 	public Long getId() {
 		return id;
 	}
-
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
+	@Override
 	public Integer getVersion() {
 		return version;
 	}
-
+	@Override
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
 
-
+	@Override
 	public int getDeleted() {
 		return deleted;
 	}
-
+	
+	@Override
 	public void setDeleted(int deleted) {
 		this.deleted = deleted;
 	}
 
-
+	@Override
 	public Date getCreationDate() {
 		return creationDate;
 	}
-
+	@Override
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
