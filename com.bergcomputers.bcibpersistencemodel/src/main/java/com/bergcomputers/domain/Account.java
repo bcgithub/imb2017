@@ -5,13 +5,15 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-/*
+
 @Entity
 @Table(name = "ACCOUNT")
 @XmlRootElement
 @NamedQuery(name=Account.findAll,query="SELECT c from Account c")
 
 class Account extends BaseEntity{
+	
+	
 	public final static String findAll = "com.bergcomputers.currency.findAll";
 	
 	@NotNull
@@ -83,4 +85,4 @@ class Account extends BaseEntity{
 		return "Account [iban=" + iban + ", amount=" + amount + "]";
 	}
 	
-}*/
+}
