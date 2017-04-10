@@ -5,7 +5,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-
+/*
 @Entity
 @Table(name = "DEVICE")
 @XmlRootElement
@@ -80,4 +80,4 @@ public class Device extends BaseEntity{
 	}
 	
 	
-}
+}*/
