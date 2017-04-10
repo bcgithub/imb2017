@@ -6,7 +6,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-/*
+
 @Entity
 @Table(name = "CUSTOMER")
 @XmlRootElement
@@ -126,9 +126,6 @@ public class Customer extends BaseEntity {
 		return role;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
 	
 	public List<Device> getDevices() {
 		return devices;
@@ -150,4 +147,4 @@ public class Customer extends BaseEntity {
 		this.role = role;
 	}
 	
-}*/
+}
