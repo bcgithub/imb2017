@@ -5,7 +5,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-/*
+
 @Entity
 @Table(name = "ACCOUNT")
 @XmlRootElement
@@ -83,4 +83,4 @@ class Account extends BaseEntity{
 		return "Account [iban=" + iban + ", amount=" + amount + "]";
 	}
 	
-}*/
+}
