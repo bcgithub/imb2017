@@ -1,8 +1,9 @@
 package com.bergcomputers.domain;
 
 public interface ICurrency {
-	String symbol = "symbol";
-	String exchangerate = "exchangerate";
+	public static final String symbol = new String("symbol");
+	public static final String exchangerate = new String("exchangeRate");
+	
 	String getSymbol();
 	void setSymbol(String symbol);
 	Double getExchangerate();

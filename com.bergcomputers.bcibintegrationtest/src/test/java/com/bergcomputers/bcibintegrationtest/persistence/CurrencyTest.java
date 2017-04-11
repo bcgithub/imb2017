@@ -79,7 +79,7 @@ public class CurrencyTest {
         em.joinTransaction();
     }
 
-    @CleanupUsingScript(phase = TestExecutionPhase.BEFORE,value="datasets/cleanup-AccountTest.sql")
+    @CleanupUsingScript(phase = TestExecutionPhase.BEFORE,value="datasets/cleanup-CurrencyTest.sql")
     @Test
     public void shouldFindAllGamesUsingJpqlQuery() throws Exception {
         // given

@@ -50,14 +50,14 @@ public class AnotherCurrencyTest {
     }
 
     @Test
-	@UsingDataSet("datasets/TwoAccounts.xml")
-	@ShouldMatchDataSet(value="datasets/TwoAccounts_save.xml", excludeColumns = { "id","creationDate","currencyid"})
+	@UsingDataSet("datasets/OtherTwoCurrencies.xml")
+	@ShouldMatchDataSet(value="datasets/OtherTwoCurrencies_save.xml", excludeColumns = { "id","creationDate","currencyid"})
 	@Transactional(TransactionMode.COMMIT)
-    @CleanupUsingScript(phase = TestExecutionPhase.BEFORE,value="datasets/cleanup-AccountTest.sql")
+    @CleanupUsingScript(phase = TestExecutionPhase.BEFORE,value="datasets/cleanup-CurrencyTest.sql")
 	public void saveCurrency() {
     	 Currency u1 = new Currency();
     	 u1.setId(8L);
-         u1.setSymbol("EUR");
+         u1.setSymbol("USD");
          u1.setExchangerate(1.2);
          u1.setCreationDate(new Date());
          try{
