@@ -34,7 +34,7 @@ public class RoleController extends AbstractController<Role, Long> implements IR
 
 	@Override
 	public List<Role> findAll() {
-		return getEntityManager().createQuery("select c from Currency c").getResultList();
+		return getEntityManager().createQuery("select c from Role c").getResultList();
 	}
 
 	@Override
