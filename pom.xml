@@ -22,6 +22,7 @@
 		<version.valid4j>1.0</version.valid4j>
 		<version.arquillian>1.1.11.Final</version.arquillian>
 		<version.jacoco>0.7.4.201502262128</version.jacoco>
+		<version.jackson>2.7.5</version.jackson>
 	</properties>
 
 	<modules>
@@ -51,6 +52,16 @@
                 <scope>import</scope>
                 <version>${version.arquillian}</version>
             </dependency>
+             <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${version.jackson}</version>
+        </dependency>
         </dependencies>
     </dependencyManagement>
 	<repositories>

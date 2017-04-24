@@ -21,6 +21,15 @@
 			<artifactId>com.bergcomputers.bcibejb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		 <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
 
 		<!-- Required only when you are using JAX-RS Client -->
 		<dependency>
