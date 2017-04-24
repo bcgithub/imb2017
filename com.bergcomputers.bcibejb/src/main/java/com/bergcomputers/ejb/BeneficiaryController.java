@@ -1,5 +1,6 @@
 package com.bergcomputers.ejb;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import com.bergcomputers.domain.Beneficiary;
 import com.bergcomputers.domain.Currency;
+import com.bergcomputers.domain.Role;
 
 public class BeneficiaryController  extends AbstractController<Beneficiary, Long> implements IBeneficiaryController {
 
@@ -28,6 +30,30 @@ public class BeneficiaryController  extends AbstractController<Beneficiary, Long
 		q.setFirstResult(startPosition);
 		return q.getResultList();
 	}
+	
+	@Override
+	public void delete(long bnfid) {
+
+		Beneficiary item = find(bnfid);
+		if (item != null) {
+			getEntityManager().remove(item);
+		}
+	}
+	@Override
+	public Beneficiary create(Beneficiary bnf) {
+		if (null != bnf && null == bnf.getCreationDate()) {
+			bnf.setCreationDate(new Date());
+		}
+		getEntityManager().persist(bnf);
+		getEntityManager().flush();
+		return bnf;
+	}
+
+	@Override
+	public Beneficiary update(Beneficiary bnf) {
+		return getEntityManager().merge(bnf);
+	}
+
 	
 	public BeneficiaryController(Class<Beneficiary> entityClass) {
 		super(entityClass);
