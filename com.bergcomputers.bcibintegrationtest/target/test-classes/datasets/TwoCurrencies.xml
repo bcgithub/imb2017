@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <baseentity id="1" dtype="Currency" creationDate="2017-01-01"/>
+    <baseentity id="2" dtype="Currency" creationDate="2017-01-02"/>
+	<currency id="1" symbol="USD" exchangerate="4.0" />
+	<currency id="2" symbol="EUR" exchangerate="4.5" />
+ </dataset>
