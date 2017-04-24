@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Mobile Banking</string>
+    <string name="title_accounts">Accounts</string>
+    <string name="title_payment">Payment</string>
+    <string name="title_pending">Pending</string>
+    <string name="title_currencies">Currencies</string>
+    <string name="title_sample">Sample</string>
+    <string name="title_config">Config</string>
+    <string name="title_currency_list">Currencies</string>
+    <string name="title_currency_detail">Currency Detail</string>
+    <string name="buttonNo">No</string>
+    <string name="buttonYes">Yes</string>
+
+</resources>

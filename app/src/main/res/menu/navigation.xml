@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_accounts"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_accounts" />
+
+    <item
+        android:id="@+id/navigation_payment"
+        android:icon="@drawable/ic_attach_money_black_24dp"
+        android:title="@string/title_payment" />
+
+    <item
+        android:id="@+id/navigation_pending"
+        android:icon="@drawable/ic_av_timer_black_24dp"
+        android:title="@string/title_pending" />
+
+    <item
+        android:id="@+id/navigation_currencies"
+        android:icon="@drawable/ic_import_export_black_24dp"
+        android:title="@string/title_currencies" />
+
+    <item
+        android:id="@+id/navigation_samples"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+        android:title="Sample" />
+
+    <item
+        android:id="@+id/navigation_config"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/title_config" />
+
+</menu>
