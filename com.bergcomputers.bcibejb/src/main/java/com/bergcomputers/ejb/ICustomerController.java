@@ -9,6 +9,12 @@ public interface  ICustomerController {
 
 	Customer find(long id);
 	List<Customer> findAll();
+	List<Customer> findRange(int startPosition, int size);
+	void delete(long customerid);
+	Customer create(Customer customer);
+	int count();
+	
+	
 	
 	
 }
