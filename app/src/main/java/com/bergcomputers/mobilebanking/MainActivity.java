@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.bergcomputers.mobilebanking.config.ConfigActivity;
 import com.bergcomputers.mobilebanking.currency.CurrencyListActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,12 +35,11 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, CurrencyListActivity.class);
                     startActivity(intent);
                     return true;
-                case R.id.navigation_samples:
-                    mTextMessage.setText(R.string.title_sample);
-                    startActivity(new Intent(MainActivity.this, CurrencyListActivity.class));
-                    return true;
                 case R.id.navigation_config:
                     mTextMessage.setText(R.string.title_config);
+                    Intent configIntent = new Intent(MainActivity.this, ConfigActivity.class);
+                    startActivity(configIntent);
+
                     return true;
             }
             return false;

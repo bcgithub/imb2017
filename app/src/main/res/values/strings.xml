@@ -10,5 +10,11 @@
     <string name="title_currency_detail">Currency Detail</string>
     <string name="buttonNo">No</string>
     <string name="buttonYes">Yes</string>
+    <string name="title_activity_config">Configurations</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Log Out</string>
 
 </resources>

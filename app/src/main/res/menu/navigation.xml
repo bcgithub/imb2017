@@ -22,11 +22,6 @@
         android:title="@string/title_currencies" />
 
     <item
-        android:id="@+id/navigation_samples"
-        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-        android:title="Sample" />
-
-    <item
         android:id="@+id/navigation_config"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/title_config" />

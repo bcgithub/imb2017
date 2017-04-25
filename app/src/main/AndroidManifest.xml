@@ -36,6 +36,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bergcomputers.mobilebanking.currency.CurrencyListActivity" />
         </activity>
+        <activity
+            android:name=".config.ConfigActivity"
+            android:label="@string/title_activity_config"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bergcomputers.mobilebanking.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
