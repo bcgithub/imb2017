@@ -122,4 +122,6 @@ public class Beneficiary extends BaseEntity implements Serializable, IBeneficiar
 			return false;
 		return true;
 	}
+	
+	
 }

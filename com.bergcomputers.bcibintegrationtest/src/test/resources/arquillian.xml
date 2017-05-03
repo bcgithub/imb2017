@@ -12,6 +12,9 @@
 			<property name="resourcesXml">
                 src/test/resources-glassfish-embedded/glassfish-resources.xml
             </property>
+            <property name="bindHttPort">
+                8989
+            </property>
 		</configuration>
 	</container>
 	<extension qualifier="jacoco">
