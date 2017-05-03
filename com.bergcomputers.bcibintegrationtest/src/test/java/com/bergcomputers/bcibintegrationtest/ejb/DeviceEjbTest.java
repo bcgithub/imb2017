@@ -63,8 +63,8 @@ public class DeviceEjbTest {
     public void findOneDeviceUsingJpqlQuery() throws Exception {
     	Device result = deviceController.find(1L);
    	    assertNotNull(result);
-//    	assertEquals("USD", result.getSymbol());
-//  	    assertEquals(new Double(4.0), result.getExchangerate());
+    	assertEquals("DeviceName", result.getName());
+ 	    assertEquals("DeviceID", result.getDeviceId());
     }
 	
 }

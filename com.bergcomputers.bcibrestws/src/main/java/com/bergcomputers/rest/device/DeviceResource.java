@@ -66,9 +66,9 @@ public class DeviceResource extends AbstractResource{
         log.debug("REST request to get all Devices");
         List<Device> devices = new ArrayList<Device>();
         if (null != page && page > 0 && null != size && size > 0){
-        	devices = devicesController.findRange((page -1) * size, size);
+        	devices = deviceController.findRange((page -1) * size, size);
         }else{
-        	devices = devicesController.findAll();
+        	devices = deviceController.findAll();
         }
         ResponseBuilder builder = Response.ok(devices);
         PaginationUtil.generatePaginationHttpHeaders(builder, new Page(null == page? 1:page, size == null ? -1:size, deviceController.count()), "/resources/currency");
@@ -96,14 +96,14 @@ public class DeviceResource extends AbstractResource{
     @POST
     @Produces("application/json")
     @Path("/")
-    public Response createCurrency(Currency currency) throws URISyntaxException {
-    	log.debug("REST request to save Currency : " + currency);
-    	currency = currencyController.create(currency);
+    public Response createDevice(Device device) throws URISyntaxException {
+    	log.debug("REST request to save Device : " + device);
+    	device = deviceController.create(device);
         
         return HeaderUtil.createEntityCreationAlert
-        		(Response.created(new URI("/resources/currency/" + currency.getId())),
-                "currency", currency.getId().toString())
-                .entity(currency).build();
+        		(Response.created(new URI("/resources/device/" + device.getId())),
+                "device", device.getId().toString())
+                .entity(device).build();
     }
     
     /**
@@ -119,11 +119,11 @@ public class DeviceResource extends AbstractResource{
     @PUT
     @Produces("application/json")
     @Path("/")
-    public Response updateCurrency(Currency currency) throws URISyntaxException {
-        log.debug("REST request to update Currency : " + currency);
-        currencyController.update(currency);
-        return HeaderUtil.createEntityUpdateAlert(Response.ok(), "currency", currency.getId().toString())
-                .entity(currency).build();
+    public Response updateDevice(Device device) throws URISyntaxException {
+        log.debug("REST request to update Device : " + device);
+        deviceController.update(device);
+        return HeaderUtil.createEntityUpdateAlert(Response.ok(), "device", device.getId().toString())
+                .entity(device).build();
     }
     
     
