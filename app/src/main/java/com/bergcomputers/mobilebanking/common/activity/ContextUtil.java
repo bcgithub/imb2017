@@ -24,7 +24,7 @@ import com.bergcomputers.mobilebanking.common.data.DataModelUtil;
 
 public class ContextUtil {
 
-	public static final String SHARED_PREFERENCES_NAME = "swoor_meetings_preferences";
+	public static final String SHARED_PREFERENCES_NAME = "bcibmob_preferences";
 	public static final String PREFS_MY_PROFILE = "my_profile_prefs";
 	protected static final String PREF_NAME_DEVICE_ID = "bcibmob_device_id";
 	protected static final String PREF_NAME_GA_SAMPLERATE = "ga_sample_rate";

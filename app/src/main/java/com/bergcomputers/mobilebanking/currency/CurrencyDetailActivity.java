@@ -11,6 +11,18 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.bergcomputers.mobilebanking.R;
+import com.bergcomputers.mobilebanking.common.Util;
+import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
+import com.bergcomputers.mobilebanking.common.net.IJSONNetworkActivity;
+import com.bergcomputers.mobilebanking.common.net.JSONAsyncTask;
+import com.bergcomputers.mobilebanking.model.Currency;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An activity representing a single Currency detail screen. This
@@ -18,7 +30,7 @@ import com.bergcomputers.mobilebanking.R;
  * item details are presented side-by-side with a list of items
  * in a {@link CurrencyListActivity}.
  */
-public class CurrencyDetailActivity extends AppCompatActivity {
+public class CurrencyDetailActivity extends BaseActivity implements IJSONNetworkActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +64,15 @@ public class CurrencyDetailActivity extends AppCompatActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(CurrencyDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(CurrencyDetailFragment.ARG_ITEM_ID));
-            CurrencyDetailFragment fragment = new CurrencyDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.currency_detail_container, fragment)
-                    .commit();
+            Long curreencyId = getIntent().getLongExtra(CurrencyDetailFragment.ARG_ITEM_ID, -1L);
+            new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_CURRENCIES+"/"+curreencyId, this, 0).execute();
+
         }
+    }
+
+    @Override
+    protected void init() {
+
     }
 
     @Override
@@ -79,5 +89,22 @@ public class CurrencyDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void handleResult(String pJSONString, int currentAction) {
+        if (null != pJSONString) {
+
+                // Create the detail fragment and add it to the activity
+                // using a fragment transaction.
+                Bundle arguments = new Bundle();
+                arguments.putString(CurrencyDetailFragment.ARG_ITEM_ID, pJSONString);
+                CurrencyDetailFragment fragment = new CurrencyDetailFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.currency_detail_container, fragment)
+                        .commit();
+
+        }
     }
 }

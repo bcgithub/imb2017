@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bergcomputers.mobilebanking.R;
-import com.bergcomputers.mobilebanking.currency.dummy.DummyContent;
+import com.bergcomputers.mobilebanking.model.Currency;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A fragment representing a single Currency detail screen.
@@ -28,7 +31,7 @@ public class CurrencyDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Currency mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,12 +48,23 @@ public class CurrencyDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            //mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            String pJSONString = getArguments().getString(ARG_ITEM_ID);
+            System.out.println(pJSONString);
+            mItem = new Currency();
+            try {
+                JSONObject jsonObj = new JSONObject(pJSONString);
+                mItem.setId(jsonObj.getLong(Currency.FIELD_ID));
+                mItem.setSymbol(jsonObj.getString(Currency.FIELD_SYMBOL));
+                mItem.setExchangerate(jsonObj.getDouble(Currency.FIELD_EXCHANGE_RATE));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.getSymbol());
             }
         }
     }
@@ -62,7 +76,7 @@ public class CurrencyDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.currency_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.currency_detail)).setText(mItem.getExchangerate().toString());
         }
 
         return rootView;

@@ -2,6 +2,7 @@ package com.bergcomputers.mobilebanking.currency;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
@@ -20,8 +21,13 @@ import android.view.MenuItem;
 
 import com.bergcomputers.mobilebanking.R;
 
-import com.bergcomputers.mobilebanking.currency.dummy.DummyContent;
+import com.bergcomputers.mobilebanking.common.Util;
+import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
+import com.bergcomputers.mobilebanking.common.net.*;
+import com.bergcomputers.mobilebanking.model.Currency;
+import org.json.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +38,8 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class CurrencyListActivity extends AppCompatActivity {
+public class CurrencyListActivity extends BaseActivity implements IJSONNetworkActivity{
+
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -63,9 +70,13 @@ public class CurrencyListActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        View recyclerView = findViewById(R.id.currency_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        //View recyclerView = findViewById(R.id.currency_list);
+        //assert recyclerView != null;
+
+        //load the data from the backend
+        new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_CURRENCIES, this, 0).execute();
+
+        //setupRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.currency_detail_container) != null) {
             // The detail container view will be present only in the
@@ -74,6 +85,11 @@ public class CurrencyListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+    }
+
+    @Override
+    protected void init() {
+
     }
 
     @Override
@@ -93,16 +109,39 @@ public class CurrencyListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+    @Override
+    public void handleResult(String pJSONString, int currentAction) {
+        if (null != pJSONString){
+            List<Currency> currencies = new ArrayList<>();
+            try {
+                JSONArray jsonArray = new JSONArray(pJSONString);
+                for(int i=0; i< jsonArray.length();i++){
+                    JSONObject jsonObj = (JSONObject)jsonArray.get(i);
+                    Currency currency = new Currency();
+                    currency.setId(jsonObj.getLong(Currency.FIELD_ID));
+                    currency.setSymbol(jsonObj.getString(Currency.FIELD_SYMBOL));
+                    currency.setExchangerate(jsonObj.getDouble(Currency.FIELD_EXCHANGE_RATE));
+                    currencies.add(currency);
+
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            View recyclerView = findViewById(R.id.currency_list);
+            assert recyclerView != null;
+
+            ((RecyclerView)recyclerView).setAdapter(new SimpleItemRecyclerViewAdapter(currencies));
+        }
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Currency> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Currency> items) {
             mValues = items;
         }
 
@@ -116,15 +155,15 @@ public class CurrencyListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getSymbol());
+            holder.mContentView.setText(mValues.get(position).getExchangerate().toString());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(CurrencyDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(CurrencyDetailFragment.ARG_ITEM_ID, holder.mItem.getId().toString());
                         CurrencyDetailFragment fragment = new CurrencyDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -133,7 +172,7 @@ public class CurrencyListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, CurrencyDetailActivity.class);
-                        intent.putExtra(CurrencyDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(CurrencyDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
 
                         context.startActivity(intent);
                     }
@@ -150,7 +189,7 @@ public class CurrencyListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Currency mItem;
 
             public ViewHolder(View view) {
                 super(view);

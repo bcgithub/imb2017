@@ -15,10 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.bergcomputers.mobilebanking.R;
+import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.currency.CurrencyListActivity;
 
 
-public class ConfigActivity extends AppCompatActivity
+public class ConfigActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -47,6 +48,7 @@ public class ConfigActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         drawer.openDrawer(GravityCompat.START);
     }
+
 
     @Override
     public void onBackPressed() {

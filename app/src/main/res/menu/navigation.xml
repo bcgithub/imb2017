@@ -17,11 +17,6 @@
         android:title="@string/title_pending" />
 
     <item
-        android:id="@+id/navigation_currencies"
-        android:icon="@drawable/ic_import_export_black_24dp"
-        android:title="@string/title_currencies" />
-
-    <item
         android:id="@+id/navigation_config"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/title_config" />

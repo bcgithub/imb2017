@@ -65,11 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
 
-        if (android.os.Build.VERSION.SDK_INT >= 9) {
-        	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        	StrictMode.setThreadPolicy(policy);
-        }
-
     	baseInit();
     	init();
     }
@@ -88,7 +83,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * the implementation should handle every operation regarding the layout
      */
-    protected abstract void init();
+	protected void init() {
+
+	}
 
 
 
@@ -98,13 +95,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 		Log.i("onDestroy", "onDestroy "+this);
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
 
-	@SuppressWarnings("rawtypes")
-	protected abstract Class getMainActivityClass();
 
 	/**
 	 * Handles dialogs shared by more activities.
@@ -172,7 +163,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 	protected Dialog buildMessageDialog(String pMessage, final int pId) {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-    	/*dialogBuilder.setMessage(pMessage)
+    	dialogBuilder.setMessage(pMessage)
     	       .setCancelable(false)
     	       .setPositiveButton(getString(R.string.buttonOk), new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int id) {
@@ -182,7 +173,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     	        		   dialog.cancel();
     	        	   }
     	           }
-    	       });*/
+    	       });
     	return dialogBuilder.create();
 	}
 
