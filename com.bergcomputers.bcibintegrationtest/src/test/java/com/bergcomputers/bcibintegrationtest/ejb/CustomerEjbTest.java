@@ -22,7 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.CustomerController;
 import com.bergcomputers.ejb.ICustomerController;
