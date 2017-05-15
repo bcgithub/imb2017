@@ -1,16 +1,23 @@
 package com.bergcomputers.ejb;
 
+import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
 import com.bergcomputers.domain.Beneficiary;
 import com.bergcomputers.domain.Currency;
+import com.bergcomputers.domain.Role;
 
+@Stateless
 public class BeneficiaryController  extends AbstractController<Beneficiary, Long> implements IBeneficiaryController {
 
+	@PersistenceContext
+	EntityManager em;
 	
 	public Beneficiary find(long id){
 		return getEntityManager().find(Beneficiary.class, id);
@@ -29,15 +36,38 @@ public class BeneficiaryController  extends AbstractController<Beneficiary, Long
 		return q.getResultList();
 	}
 	
-	public BeneficiaryController(Class<Beneficiary> entityClass) {
-		super(entityClass);
+	@Override
+	public void delete(long bnfid) {
+
+		Beneficiary item = find(bnfid);
+		if (item != null) {
+			getEntityManager().remove(item);
+		}
+	}
+	@Override
+	public Beneficiary create(Beneficiary bnf) {
+		if (null != bnf && null == bnf.getCreationDate()) {
+			bnf.setCreationDate(new Date());
+		}
+		getEntityManager().persist(bnf);
+		getEntityManager().flush();
+		return bnf;
+	}
+
+	@Override
+	public Beneficiary update(Beneficiary bnf) {
+		return getEntityManager().merge(bnf);
+	}
+
+	
+	public BeneficiaryController() {
+		super(Beneficiary.class);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
-		return null;
+		return em;
 	}
 
 }
