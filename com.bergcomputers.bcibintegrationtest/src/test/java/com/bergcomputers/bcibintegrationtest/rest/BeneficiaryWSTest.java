@@ -44,13 +44,16 @@ public class BeneficiaryWSTest extends AbstractTest {
 	
 	private GenericType<List<Beneficiary>> genericListType = new GenericType<List<Beneficiary>>() {};
 
-	private String symbol = "Beneficiary Symbol";
-	//private Double exchangeRate = 4.0D;
-	private String exchangeRate = "Beneficiary exchange rate";
 	private Date creationDate = new Date();
+	private String defaultName="First";
+	private String accountHolderDefault="Company SA";	
+	private String details ="Beneficiary details";
+	private String defaultIban = "IBAN567890";
+
 	
-	 @Inject
-	 private IBeneficiaryController beneficiaryContoller;
+	@Inject
+	private IBeneficiaryController beneficiaryController;
+
 	 
 	@Deployment
 	public static WebArchive createDeployment() {
@@ -216,9 +219,11 @@ public class BeneficiaryWSTest extends AbstractTest {
 	 */
 	private Beneficiary createBeneficiaryEntity(){
 		Beneficiary beneficiary = new Beneficiary();
-		beneficiary.setDetails(exchangeRate);
-		beneficiary.setAccountHolder(symbol);
+		beneficiary.setDetails(details);
+		beneficiary.setAccountHolder(accountHolderDefault);
 		beneficiary.setCreationDate(creationDate);
+		beneficiary.setName(defaultName);
+		beneficiary.setIban(defaultIban);
 		return beneficiary;
 	}
 	

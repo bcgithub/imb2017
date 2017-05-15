@@ -33,7 +33,7 @@ import com.bergcomputers.rest.util.Page;
 import com.bergcomputers.rest.util.PaginationUtil;
 
 @Stateless
-@Path("currency")
+@Path("beneficiary")
 public class BeneficiaryResource extends AbstractResource{
 	private final static Logger log = Logger.getLogger(BeneficiaryResource.class.getName());
    
