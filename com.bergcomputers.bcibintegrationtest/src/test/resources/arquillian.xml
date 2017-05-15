@@ -12,7 +12,9 @@
 			<property name="resourcesXml">
                 src/test/resources-glassfish-embedded/glassfish-resources.xml
             </property>
-		</configuration>
+             <property name="bindHttpPort">18080</property>
+            </configuration>
+   		
 	</container>
 	<extension qualifier="jacoco">
 		<property name="excludes">com.bergcomputers.domain.IAccount</property>
