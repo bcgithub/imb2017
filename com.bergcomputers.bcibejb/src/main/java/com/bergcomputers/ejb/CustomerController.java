@@ -9,17 +9,18 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
-import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 
 @Stateless
 public class CustomerController extends AbstractController<Customer, Long>  implements ICustomerController {
 	
 	
-	
+	@PersistenceContext
+	EntityManager em;
 
-	public CustomerController(Class<Customer> entityClass) {
-		super(entityClass);
+
+	public CustomerController() {
+		super(Customer.class);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -66,7 +67,7 @@ public class CustomerController extends AbstractController<Customer, Long>  impl
 	@Override
 	protected EntityManager getEntityManager() {
 		// TODO Auto-generated method stub
-		return null;
+		return em;
 	}
 	
 	@Override
