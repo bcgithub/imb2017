@@ -42,12 +42,12 @@ public class DeviceWSTest extends AbstractTest {
 	
 	private GenericType<List<Device>> genericListType = new GenericType<List<Device>>() {};
 
-//	private String symbol = "USD";
-//	private Double exchangeRate = 4.0D;
+	private String name = "DeviceName";
+	private long deviceId = 54;
 	private Date creationDate = new Date();
 	
 	 @Inject
-	 private IDeviceController deviceContoller;
+	 private IDeviceController deviceController;
 	 
 	@Deployment
 	public static WebArchive createDeployment() {
@@ -115,7 +115,7 @@ public class DeviceWSTest extends AbstractTest {
 		List<Device> devicesNewList = getDevices();
 		
 		//check the list size to be increased by one
-		assertEquals(device.size() +1, devicesNewList.size() );
+		assertEquals(devices.size() +1, devicesNewList.size() );
 		
 		assertEquals(device.getName(), created.getName());
 		assertEquals(device.getDeviceId(), created.getDeviceId());
@@ -159,7 +159,7 @@ public class DeviceWSTest extends AbstractTest {
 	@RunAsClient
 	public void updateDeviceTest() {
 		String newName = "NewDeviceName";
-		String newDeviceId = "NewDeviceID";
+		long newDeviceId = 21;
 		Date newCreation = new Date();
 		
 		//Creating test Device

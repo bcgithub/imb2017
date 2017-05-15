@@ -62,6 +62,7 @@ public class DeviceResource extends AbstractResource{
     @GET
     @Produces("application/json")
     @Path("/")
+    
     public Response findDevicesRange(@QueryParam(PAGE_PARAM) Integer page, @QueryParam(SIZE_PARAM) Integer size) throws URISyntaxException {
         log.debug("REST request to get all Devices");
         List<Device> devices = new ArrayList<Device>();
@@ -71,7 +72,7 @@ public class DeviceResource extends AbstractResource{
         	devices = deviceController.findAll();
         }
         ResponseBuilder builder = Response.ok(devices);
-        PaginationUtil.generatePaginationHttpHeaders(builder, new Page(null == page? 1:page, size == null ? -1:size, deviceController.count()), "/resources/currency");
+        PaginationUtil.generatePaginationHttpHeaders(builder, new Page(null == page? 1:page, size == null ? -1:size, deviceController.count()), "/resources/device");
         return builder.build();
     }
     

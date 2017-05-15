@@ -3,22 +3,24 @@ package com.bergcomputers.ejb;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
 import com.bergcomputers.domain.Device;
-
+@Stateless
 public class DeviceControler extends AbstractController<Device, Long> implements IDeviceController {
 
+	@PersistenceContext
+	EntityManager em;
 
 	public DeviceControler() {
 		super(Device.class);
 	}
 
-	@PersistenceContext
-	EntityManager em;
+
 	
 	@Override
 	protected EntityManager getEntityManager() {
