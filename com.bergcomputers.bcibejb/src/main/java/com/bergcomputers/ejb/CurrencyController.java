@@ -64,6 +64,8 @@ public class CurrencyController extends AbstractController<Currency, Long> imple
 		getEntityManager().flush();
 		return currency;
 	}
+	
+	
 
 	@Override
 	public Currency update(Currency currency) {
