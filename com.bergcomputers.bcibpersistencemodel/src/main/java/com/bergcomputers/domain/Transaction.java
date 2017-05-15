@@ -41,7 +41,7 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 	@JoinColumn(name="ACCOUNTID")
 	private Account account;
 
-	private String type;
+	private String transactionType;
 	private Double amount;
 	private String sender;
 	private String details;
@@ -80,14 +80,14 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 		this.date=Date;
 	}
 	@Override
-	public String getType() {
+	public String getTransactionType() {
 
-		return this.type;
+		return this.transactionType;
 	}
 	@Override
-	public void setType(String type) {
+	public void setTransactionType(String type) {
 
-		this.type=type;
+		this.transactionType=type;
 	}
 	@Override
 	public Double getAmount() {
@@ -142,7 +142,7 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 		result = prime * result + ((details == null) ? 0 : details.hashCode());
 		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((transactionType == null) ? 0 : transactionType.hashCode());
 		return result;
 	}
 
@@ -185,10 +185,10 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 				return false;
 		} else if (!status.equals(other.status))
 			return false;
-		if (type == null) {
-			if (other.type != null)
+		if (transactionType == null) {
+			if (other.transactionType != null)
 				return false;
-		} else if (!type.equals(other.type))
+		} else if (!transactionType.equals(other.transactionType))
 			return false;
 		return true;
 	}
@@ -196,7 +196,7 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 	@Override
 	public String toString() {
 		return "Transaction [date=" + date + ", account=" + account + ", type="
-				+ type + ", amount=" + amount + ", sender=" + sender
+				+ transactionType + ", amount=" + amount + ", sender=" + sender
 				+ ", details=" + details + ", status=" + status + "]";
 	}
 
