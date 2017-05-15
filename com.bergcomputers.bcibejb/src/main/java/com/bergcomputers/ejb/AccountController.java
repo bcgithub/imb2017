@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -12,7 +13,7 @@ import com.bergcomputers.domain.Account;
 
 @Stateless
 public class AccountController extends AbstractController<Account,Long> implements IAccountController{
-
+	@PersistenceContext
 	EntityManager em;
 	
 	public AccountController(){

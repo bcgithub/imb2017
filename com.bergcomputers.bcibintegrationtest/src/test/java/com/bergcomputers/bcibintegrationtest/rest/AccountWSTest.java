@@ -34,7 +34,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	private GenericType<List<Account>> genericListType = new GenericType<List<Account>>() {};
 
 	private Date creationDate = new Date();
-	private String iban;
+	private String iban="IBAN1234DE";
 	private Double amount;
 	
 	 @Inject
