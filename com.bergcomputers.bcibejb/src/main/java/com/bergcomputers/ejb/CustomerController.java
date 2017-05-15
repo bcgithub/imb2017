@@ -3,6 +3,7 @@ package com.bergcomputers.ejb;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 
+@Stateless
 public class CustomerController extends AbstractController<Customer, Long>  implements ICustomerController {
 	
 	

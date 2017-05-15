@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,6 +32,8 @@ import com.bergcomputers.rest.util.Page;
 import com.bergcomputers.rest.util.PaginationUtil;
 
 
+@Stateless
+@Path("customer")
 public class CustomerResource extends AbstractResource {
 	private final static Logger log = Logger.getLogger(CustomerResource.class.getName());
 	   
