@@ -4,7 +4,7 @@ import java.util.Date;
 
 public interface ITransaction {
 	public static final String date = new String("date");
-	public static final String type = new String("type");
+	public static final String transactiontype = new String("type");
 	public static final String amount = new String("amount");
 	public static final String sender = new String("sender");
 	public static final String details = new String("details");
@@ -19,9 +19,9 @@ public interface ITransaction {
 
 	public abstract void setTransactionDate(Date Date);
 
-	public abstract String getType();
+	public abstract String getTransactionType();
 
-	public abstract void setType(String type);
+	public abstract void setTransactionType(String type);
 
 	public abstract Double getAmount();
 

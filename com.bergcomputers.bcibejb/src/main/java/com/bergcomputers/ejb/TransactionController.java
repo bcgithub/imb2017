@@ -3,6 +3,7 @@ package com.bergcomputers.ejb;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import com.bergcomputers.domain.Transaction;
 
+@Stateless
 public class TransactionController extends AbstractController<Transaction, Long> implements ITransactionController
 {
 	@PersistenceContext
@@ -31,7 +33,7 @@ public class TransactionController extends AbstractController<Transaction, Long>
 	
 	@Override
 	public List<Transaction> findAll() {
-		return getEntityManager().createQuery("select c from TransactionTbl c").getResultList();
+		return getEntityManager().createQuery("select c from Transaction c").getResultList();
 	}
 	
 	@Override

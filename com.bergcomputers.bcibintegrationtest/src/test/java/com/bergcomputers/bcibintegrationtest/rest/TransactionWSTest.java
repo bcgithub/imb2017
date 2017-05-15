@@ -115,7 +115,7 @@ public class TransactionWSTest extends AbstractTest
 		assertEquals(transaction.getDate(), created.getDate());
 		assertEquals(transaction.getAccount(), created.getAccount());
 		assertEquals(transaction.getTransactionDate(), created.getTransactionDate());
-		assertEquals(transaction.getType(), created.getType());
+		assertEquals(transaction.getTransactionType(), created.getTransactionType());
 		assertEquals(transaction.getAmount(), created.getAmount());
 		assertEquals(transaction.getSender(), created.getSender());
 		assertEquals(transaction.getDetails(), created.getDetails());
@@ -145,7 +145,7 @@ public class TransactionWSTest extends AbstractTest
 		assertEquals(obtained.getDate(), created.getDate());
 		assertEquals(obtained.getAccount(), created.getAccount());
 		assertEquals(obtained.getTransactionDate(), created.getTransactionDate());
-		assertEquals(obtained.getType(), created.getType());
+		assertEquals(obtained.getTransactionType(), created.getTransactionType());
 		assertEquals(obtained.getAmount(), created.getAmount());
 		assertEquals(obtained.getSender(), created.getSender());
 		assertEquals(obtained.getDetails(), created.getDetails());
@@ -179,7 +179,7 @@ public class TransactionWSTest extends AbstractTest
 		transaction.setDate(newCreation);
 		transaction.setAccount(newAccount);
 		transaction.setTransactionDate(newCreation);
-		transaction.setType(newType);
+		transaction.setTransactionType(newType);
 		transaction.setAmount(newAmount);
 		transaction.setSender(newSender);
 		transaction.setDetails(newDetails);
@@ -192,7 +192,7 @@ public class TransactionWSTest extends AbstractTest
 		assertEquals(transaction.getId(), updated.getId());
 		assertEquals(newAccount, updated.getAccount());
 		assertEquals(newCreation, updated.getTransactionDate());
-		assertEquals(newType, updated.getType());
+		assertEquals(newType, updated.getTransactionType());
 		assertEquals(newAmount, updated.getAmount());
 		assertEquals(newSender, updated.getSender());
 		assertEquals(newDetails, updated.getDetails());
@@ -238,7 +238,7 @@ public class TransactionWSTest extends AbstractTest
 		transaction.setDate(creationDate);
 		transaction.setAccount(defaultAccount);
 		transaction.setTransactionDate(creationDate);
-		transaction.setType(defaultType);
+		transaction.setTransactionType(defaultType);
 		transaction.setAmount(defaultAmount);
 		transaction.setSender(defaultSender);
 		transaction.setDetails(defaultDetails);
