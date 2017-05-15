@@ -164,7 +164,7 @@ public class BeneficiaryWSTest extends AbstractTest {
 	@Test
 	@RunAsClient
 	public void updateBeneficiaryTest() {
-		Double newRate = 3.0d;
+		//Double newRate = 3.0d;
 		String newSymbol = "EUR";
 		Date newCreation = new Date();
 		
@@ -172,7 +172,8 @@ public class BeneficiaryWSTest extends AbstractTest {
 		Beneficiary beneficiary = createBeneficiary();
 
 		beneficiary.setDetails("Plata"); 	//exchange
-		beneficiary.setAccountHolder("Pop");	//symbol
+		//beneficiary.setDetails(newRate);
+		beneficiary.setAccountHolder("EUR");	//symbol
 		beneficiary.setCreationDate(newCreation);
 		
 		Response resp = target(serviceRelativePath).put(json(beneficiary));
@@ -180,7 +181,7 @@ public class BeneficiaryWSTest extends AbstractTest {
 		
 		assertEquals(beneficiary.getId(), updated.getId());
 		assertEquals(newSymbol, updated.getAccountHolder());
-		assertEquals(newRate, updated.getDetails());
+		//assertEquals(newRate, updated.getDetails());
 		assertEquals(newCreation, updated.getCreationDate());
 		
 		//Deleting test beneficiary
@@ -196,7 +197,7 @@ public class BeneficiaryWSTest extends AbstractTest {
 	@RunAsClient
 	public void deleteBeneficiaryTest() {
 		// Creating test beneficiary
-		createBeneficiary();
+		createBeneficiary();	//fara
 		
 		// existing beneficiaries
 		List<Beneficiary> beneficiaries = getBeneficiaries();
@@ -204,6 +205,7 @@ public class BeneficiaryWSTest extends AbstractTest {
 		
 		//delete test beneficiary
 		target(serviceRelativePath + beneficiaries.get(0).getId()).delete();
+		//target(serviceRelativePath + beneficiaries.get(-1).getId()).delete();
 		
 		// new beneficiaries list
 		List<Beneficiary> beneficiariesNewList = getBeneficiaries();
@@ -221,7 +223,7 @@ public class BeneficiaryWSTest extends AbstractTest {
 		Beneficiary beneficiary = new Beneficiary();
 		beneficiary.setDetails(details);
 		beneficiary.setAccountHolder(accountHolderDefault);
-		beneficiary.setCreationDate(creationDate);
+		beneficiary.setCreationDate(creationDate);	//fara
 		beneficiary.setName(defaultName);
 		beneficiary.setIban(defaultIban);
 		return beneficiary;
