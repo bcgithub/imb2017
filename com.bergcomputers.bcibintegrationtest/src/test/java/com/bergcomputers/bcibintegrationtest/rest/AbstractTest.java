@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public abstract class AbstractTest {
 
-	@ArquillianResource
+	//@ArquillianResource
 	protected URL deploymentUrl;
 	protected WebTarget webTarget;
 	protected final static MavenResolverSystem RESOLVER = Maven.resolver();
@@ -40,6 +40,9 @@ public abstract class AbstractTest {
 
 	@Before
 	public void buildWebTarget() throws Exception {
+		if (null == deploymentUrl){
+			deploymentUrl = new URL("http://localhost:18080/test/");
+		}
 		webTarget = ClientBuilder.newClient().target(deploymentUrl.toURI().toString() + "resources/");
 	}
 

@@ -10,27 +10,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
+import com.bergcomputers.domain.Role;
 import com.bergcomputers.domain.Transaction;
-import com.bergcomputers.ejb.AccountController;
 import com.bergcomputers.ejb.IAccountController;
+import com.bergcomputers.ejb.ICurrencyController;
+import com.bergcomputers.ejb.ICustomerController;
+import com.bergcomputers.ejb.IRoleController;
 import com.bergcomputers.ejb.ITransactionController;
 import com.bergcomputers.ejb.TransactionController;
-import com.bergcomputers.rest.account.AccountResource;
 import com.bergcomputers.rest.transaction.TransactionResource;
 
+@RunWith(Arquillian.class)
 public class TransactionWSTest extends AbstractTest
 {
 	private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
@@ -49,27 +53,36 @@ public class TransactionWSTest extends AbstractTest
 	private String defaultStatus = "Default Status";
 	private Date creationDate = new Date();
 	
-	private Account defaultAccountTest = new Account();
+	private Role defaultRole = new Role();
+	private Currency defaultCurrency = new Currency();
+	private Customer defaultCustomer = new Customer();
 	
-	 @Inject()
-	 private ITransactionController transactionController;
+	@Inject
+	private ITransactionController transactionController;
 	 
-	 @EJB(lookup="java:global/test/AccountController")
-	 private AccountController accountController;
+	@Inject
+	private IAccountController accountController;
+	
+	@Inject
+	private ICurrencyController currencyController;
+	
+	@Inject
+	private ICustomerController customerController;
+	
+	@Inject
+	private IRoleController roleController;
 	 
 	@Deployment
 	public static WebArchive createDeployment() {
 		return buildArchive().addPackage(TransactionResource.class.getPackage()).addPackage(Transaction.class.getPackage())
-				.addPackage(TransactionController.class.getPackage()).addClass(TransactionResource.class)
-				.addPackage(AccountResource.class.getPackage()).addPackage(Account.class.getPackage())
-				.addPackage(AccountController.class.getPackage()).addClass(AccountResource.class);
+				.addPackage(TransactionController.class.getPackage());
 	}
 	
 	/**
 	 * Test if we obtain the list of all currencies
 	 */
 	@Test
-	@RunAsClient
+	//@RunAsClient
 	public void getTransactionsTest() {
 		Transaction created = createTransaction();
 		List<Transaction> transactions = target(serviceRelativePath).accept(jsonFormat).get(genericListType);
@@ -82,8 +95,8 @@ public class TransactionWSTest extends AbstractTest
 	/**
 	 * Test if we obtain the paginated list of all transactions
 	 */
-	//@Test
-	@RunAsClient
+	@Test
+	//@RunAsClient
 	public void getTransactionsPaginationTest() {
 		Transaction created1 = createTransaction();
 		Transaction created2 = createTransaction();
@@ -249,23 +262,33 @@ public class TransactionWSTest extends AbstractTest
 	 */
 	private Transaction createTransactionEntity(){
 		
-		defaultAccountTest.setAmount(100d);
-		defaultAccountTest.setCreationDate(new Date());
-		defaultAccountTest.setCurrency(new Currency());
-		defaultAccountTest.setCustomer(new Customer());
-		defaultAccountTest.setDeleted(0);
-		defaultAccountTest.setIban("0000000000");
-		defaultAccountTest.setId((long) 99);
-		defaultAccountTest.setVersion(99);
+		defaultCurrency.setExchangerate(2.0);
+		defaultCurrency.setSymbol("USD");
+		defaultCurrency = currencyController.create(defaultCurrency);
 		
-		Response resp = target(accountRelativePath).post(json(defaultAccountTest));
-		Account account3 = resp.readEntity(Account.class);
+		defaultRole.setName("User");
+		defaultRole = roleController.create(defaultRole);
 		
-		//Account account2 = accountController.create(defaultAccountTest);
+		defaultCustomer.setFirstName("Customer1");
+		defaultCustomer.setLastName("LastName");
+		defaultCustomer.setLogin("c1login");
+		defaultCustomer.setPassword("c1pwd");
+		defaultCustomer.setRole(defaultRole);
+		defaultCustomer = customerController.create(defaultCustomer);
+		
+		defaultAccount.setAmount(100d);
+		defaultAccount.setCreationDate(new Date());
+		defaultAccount.setCurrency(defaultCurrency);
+		defaultAccount.setCustomer(defaultCustomer);
+		defaultAccount.setDeleted(0);
+		defaultAccount.setIban("0000000000");
+		defaultAccount.setId(99L);
+		
+		defaultAccount = accountController.create(defaultAccount);
 		
 		Transaction transaction = new Transaction();
 		transaction.setDate(creationDate);
-		transaction.setAccount(account3);//(defaultAccount);
+		transaction.setAccount(defaultAccount);
 		transaction.setTransactionDate(creationDate);
 		transaction.setTransactionType(defaultType);
 		transaction.setAmount(defaultAmount);
