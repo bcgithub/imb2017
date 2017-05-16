@@ -8,6 +8,7 @@
         <class>com.bergcomputers.domain.Beneficiary</class>
          <class>com.bergcomputers.domain.Account</class>
         <class>com.bergcomputers.domain.Transaction</class>
+         <class>com.bergcomputers.domain.Device</class>
  
         <properties>
 <!--      <property name="eclipselink.ddl-generation" value="create-tables"/>
@@ -16,6 +17,7 @@
             <property name="eclipselink.target-server" value="SunAS9"/>
             <property name="eclipselink.logging.level" value="FINEST"/>
             <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
             <property name="javax.persistence.query.timeout" value="10"/>
             <property name="javax.persistence.lock.timeout" value="10"/>
             <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>

@@ -3,8 +3,10 @@ package com.bergcomputers.domain;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+@XmlRootElement
 public class Device extends BaseEntity implements IDevice {
 
 	private String name;

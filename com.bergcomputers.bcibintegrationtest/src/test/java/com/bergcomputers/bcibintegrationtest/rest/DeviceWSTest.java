@@ -235,7 +235,8 @@ public class DeviceWSTest extends AbstractTest {
 	 * @return list of existing currencies in the database
 	 */
 	private List<Device> getDevices(){
-		return target(serviceRelativePath).accept(jsonFormat).get(genericListType);
+		List<Device> devices = target(serviceRelativePath).accept(jsonFormat).get(genericListType);
+		return devices;
 	}
 	
 	/**
