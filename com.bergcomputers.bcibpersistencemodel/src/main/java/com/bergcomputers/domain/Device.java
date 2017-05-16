@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 public class Device extends BaseEntity implements IDevice {
 
 	private String name;
-	private String deviceId;
+	private long deviceId;
 	@ManyToOne
 	@JoinColumn(name="CUSTOMERID")
 	private Customer customer;
@@ -30,14 +30,14 @@ public class Device extends BaseEntity implements IDevice {
 	 * @see com.bergcomputers.domain.IDevice#getDeviceId()
 	 */
 	@Override
-	public String getDeviceId() {
+	public long getDeviceId() {
 		return deviceId;
 	}
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.domain.IDevice#setDeviceId(java.lang.String)
 	 */
 	@Override
-	public void setDeviceId(String deviceId) {
+	public void setDeviceId(long deviceId) {
 		this.deviceId = deviceId;
 	}
 	/* (non-Javadoc)
