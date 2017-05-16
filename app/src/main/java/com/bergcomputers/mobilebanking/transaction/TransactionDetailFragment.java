@@ -61,8 +61,9 @@ public class TransactionDetailFragment extends Fragment {
             try {
                 JSONObject jsonObj = new JSONObject(pJSONString);
                 mItem.setId(jsonObj.getLong(Transaction.FIELD_ID));
-                mItem.setSymbol(jsonObj.getString(Transaction.FIELD_SYMBOL));
-                mItem.setExchangerate(jsonObj.getDouble(Transaction.FIELD_EXCHANGE_RATE));
+                //mItem.setDate(jsonObj.get(Transaction.FIELD_DATE));
+                mItem.setDetails(jsonObj.getString(Transaction.FIELD_DETAILS));
+                mItem.setAmount(jsonObj.getDouble(Transaction.FIELD_AMOUNT));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -71,7 +72,7 @@ public class TransactionDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getSymbol());
+                appBarLayout.setTitle(mItem.getDetails());
             }
         }
     }
@@ -83,7 +84,7 @@ public class TransactionDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.transaction_detail)).setText(mItem.getExchangerate().toString());
+            ((TextView) rootView.findViewById(R.id.transaction_detail)).setText(mItem.getDetails());
         }
 
         return rootView;

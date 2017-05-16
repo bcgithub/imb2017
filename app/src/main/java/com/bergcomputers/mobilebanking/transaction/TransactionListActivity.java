@@ -30,12 +30,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 /**
  * An activity representing a list of Currencies. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link CurrencyDetailActivity} representing
+ * lead to a {@link TransactionDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -119,13 +120,13 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
                 for(int i=0; i< jsonArray.length();i++){
                     JSONObject jsonObj = (JSONObject)jsonArray.get(i);
                     Transaction transaction = new Transaction();
-                    transaction.setTransactionType(jsonObj.getLong(Transaction.FIELD_TRANSACTION_TYPE));
-                    transaction.setDate(jsonObj.getString(Transaction.FIELD_DATE));
+                    transaction.setTransactionType(jsonObj.getString(Transaction.FIELD_TRANSACTION_TYPE));
+                    transaction.setDate(new Date(jsonObj.getInt(Transaction.FIELD_DATE)));
                     transaction.setAmount(jsonObj.getDouble(Transaction.FIELD_AMOUNT));
-                    transaction.setSender(jsonObj.getDouble(Transaction.FIELD_SENDER));
+                    transaction.setSender(jsonObj.getString(Transaction.FIELD_SENDER));
                     transaction.setAmount(jsonObj.getDouble(Transaction.FIELD_AMOUNT));
-                    transaction.setDetails(jsonObj.getDouble(Transaction.FIELD_DETAILS));
-                    transaction.setStatus(jsonObj.getDouble(Transaction.FIELD_STATUS));
+                    transaction.setDetails(jsonObj.getString(Transaction.FIELD_DETAILS));
+                    transaction.setStatus(jsonObj.getString(Transaction.FIELD_STATUS));
 
                     currencies.add(transaction);
 
@@ -161,8 +162,8 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getDate());
-            holder.mContentView.setText(mValues.get(position).getExchangerate().toString());
+            holder.mIdView.setText(mValues.get(position).getDate().toString());
+            holder.mContentView.setText(mValues.get(position).getDetails());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

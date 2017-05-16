@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.config.ConfigActivity;
 import com.bergcomputers.mobilebanking.currency.CurrencyListActivity;
+import com.bergcomputers.mobilebanking.transaction.TransactionListActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -30,6 +31,8 @@ public class MainActivity extends BaseActivity {
                     return true;
                 case R.id.navigation_pending:
                     mTextMessage.setText(R.string.title_pending);
+                    Intent configIntentT = new Intent(MainActivity.this, TransactionListActivity.class);
+                    startActivity(configIntentT);
                     return true;
                 case R.id.navigation_config:
                     mTextMessage.setText(R.string.title_config);
