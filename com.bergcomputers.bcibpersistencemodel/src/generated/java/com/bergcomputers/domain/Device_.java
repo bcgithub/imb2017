@@ -9,7 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Device_ extends com.bergcomputers.domain.BaseEntity_ {
 
 	public static volatile SingularAttribute<Device, String> name;
-	public static volatile SingularAttribute<Device, String> deviceId;
+	public static volatile SingularAttribute<Device, Long> deviceId;
 	public static volatile SingularAttribute<Device, Customer> customer;
 
 }

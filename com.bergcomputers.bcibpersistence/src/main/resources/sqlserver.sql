@@ -59,7 +59,7 @@ FOREIGN KEY (currencyid)
 REFERENCES Currency(id)
 );
 
-CREATE TABLE TransactionTbl (id int NOT NULL primary key, accountid int NOT NULL, date DATETIME, type VARCHAR(255), amount float, sender VARCHAR(255), details VARCHAR(255), status VARCHAR(255),
+CREATE TABLE TransactionTbl (id int NOT NULL primary key, accountid int NOT NULL, date DATETIME, transactiontype VARCHAR(255), amount float, sender VARCHAR(255), details VARCHAR(255), status VARCHAR(255),
 FOREIGN KEY (id)
         REFERENCES BaseEntity(id)
         ON DELETE CASCADE,
@@ -102,3 +102,5 @@ insert into BaseEntity (dtype) values('Beneficiary');
 insert into Beneficiary values(SCOPE_IDENTITY(), 'ROBUC012345', 'plata curent', 'detalii ordin de plata pt factura lunara de curent', 'ENEL Energie SA');
 insert into BaseEntity (dtype) values('Beneficiary');
 insert into Beneficiary values(SCOPE_IDENTITY(), 'ROBUC012346', 'plata rata casa', 'detalii ordin de plata pt rata la casa', 'BCR');
+insert into BaseEntity (dtype) values('Device');
+insert into Device values(SCOPE_IDENTITY(), 1, 'deviceul meu', 4);
