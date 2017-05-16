@@ -45,6 +45,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bergcomputers.mobilebanking.MainActivity" />
         </activity>
+
+        <activity
+            android:name=".beneficiary.BeneficiaryListActivity"
+            android:label="@string/title_activity_beneficiary"
+            android:parentActivityName=".config.ConfigActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bergcomputers.mobilebanking.config.ConfigActivity" />
+        </activity>
+
+        <activity
+            android:name=".beneficiary.BeneficiaryDetailActivity"
+            android:label="@string/title_currency_detail"
+            android:parentActivityName=".beneficiary.BeneficiaryListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bergcomputers.mobilebanking.beneficiary.BeneficiaryListActivity" />
+        </activity>
     </application>
 
 </manifest>

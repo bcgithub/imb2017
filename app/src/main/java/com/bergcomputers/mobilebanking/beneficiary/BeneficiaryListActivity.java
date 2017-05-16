@@ -74,7 +74,7 @@ public class BeneficiaryListActivity extends BaseActivity implements IJSONNetwor
         //assert recyclerView != null;
 
         //load the data from the backend
-        new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_CURRENCIES, this, 0).execute();
+        new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_BENEFICIARIES, this, 0).execute();
 
         //setupRecyclerView((RecyclerView) recyclerView);
 
