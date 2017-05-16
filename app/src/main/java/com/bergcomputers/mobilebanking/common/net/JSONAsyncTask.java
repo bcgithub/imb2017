@@ -46,6 +46,7 @@ public class JSONAsyncTask extends AsyncTask<JSONObject, Void, String> {
 		HttpClient httpClient = HTTPHelper.createHTTPClient();
 		//HttpPost httppost = new HttpPost(url);
 		HttpGet httpget = new HttpGet(url);
+		Log.i("Get",url);
 
 		String jsonString = null;
 		try {
