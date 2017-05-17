@@ -1,7 +1,7 @@
 package com.bergcomputers.bcibintegrationtest.rest;
 
 import static javax.ws.rs.client.Entity.json;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,7 +100,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			Response resp = target(serviceRelativePath).post(json(account));
 			Account created = resp.readEntity(Account.class);
 
-			//Getting list of currencies
+			//Getting list of accounts
 			List<Account> accountsNewList = getAccounts();
 			
 			//check the list size to be increased by one
@@ -115,7 +115,47 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			
 
 		}
+		@Test
+		//@RunAsClient
+		public void createAccountNullTest() {
+					
+			//Creating test account
+			Account account =null;
+			try{
+				accountContoller.create(account);			
+				fail("If ex not thrown should fail");
+			}catch(Exception e){
+				
+			}
+		}
 		
+		@Test
+		@RunAsClient
+		public void createAccountNullCreationDateTest() {
+					
+			//existing currencies
+			List<Account> accounts = getAccounts();
+
+			//Creating test account
+			Account account = createAccountNullCreationDateEntity();
+			Response resp = target(serviceRelativePath).post(json(account));
+			Account created = resp.readEntity(Account.class);
+
+			//Getting list of accounts
+			List<Account> accountsNewList = getAccounts();
+			
+			//check the list size to be increased by one
+			assertEquals(accounts.size() +1, accountsNewList.size() );
+	
+			assertEquals(account.getIban(), created.getIban());
+			assertEquals(account.getAmount(), created.getAmount());
+			assertNotNull(created.getCreationDate());
+		
+			//Deleting test account
+			deleteAccount((accountsNewList.get(0).getId()));
+			
+
+		}
 		/**
 		 * Test if an account can be obtained by its id
 		 */
@@ -228,6 +268,15 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			account.setCreationDate(creationDate);
 			return account;
 		}
+		
+		private Account createAccountNullCreationDateEntity(){
+			Account account = new Account();
+			account.setAmount(amount);
+			account.setIban(iban);
+			account.setCreationDate(null);
+			return account;
+		}
+		
 		
 		/**
 		 * 
