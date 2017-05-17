@@ -214,6 +214,24 @@ public class BeneficiaryWSTest extends AbstractTest {
 		assertEquals(beneficiaries.size() - 1, beneficiariesNewList.size() );
 
 	}
+	/*
+	public void deleteBeneficiaryTest_faraBeneficiar() {
+		// Creating test beneficiary
+		// existing beneficiaries
+		List<Beneficiary> beneficiaries = getBeneficiaries();
+		
+		
+		//delete test beneficiary
+		//beneficiarul nu exista
+		target(serviceRelativePath + beneficiaries.get(-1).getId()).delete();
+		
+		// new beneficiaries list
+		List<Beneficiary> beneficiariesNewList = getBeneficiaries();
+		
+		//check the list size to be decrease by one
+		assertEquals(beneficiaries.size() - 1, beneficiariesNewList.size() );
+
+	}*/
 	
 	/**
 	 * 
@@ -228,7 +246,17 @@ public class BeneficiaryWSTest extends AbstractTest {
 		beneficiary.setIban(defaultIban);
 		return beneficiary;
 	}
-	
+	/*
+	private Beneficiary createBeneficiaryEntity_faraData(){
+		Beneficiary beneficiary = new Beneficiary();
+		beneficiary.setDetails(details);
+		beneficiary.setAccountHolder(accountHolderDefault);
+		//beneficiary.setCreationDate(creationDate);	//fara
+		beneficiary.setName(defaultName);
+		beneficiary.setIban(defaultIban);
+		return beneficiary;
+	}
+	*/
 	/**
 	 * 
 	 * @return the created entity in the database
