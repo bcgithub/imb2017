@@ -45,6 +45,8 @@ public class TransactionWSTest extends AbstractTest
 	
 	private GenericType<List<Transaction>> genericListType = new GenericType<List<Transaction>>() {};
 
+	private long defaultID = 99L;
+	
 	private Account defaultAccount = new Account();
 	private String defaultType = "Default Type";
 	private Double defaultAmount = 10.0;
@@ -90,6 +92,7 @@ public class TransactionWSTest extends AbstractTest
 		
 		//Deleting test transaction
 		deleteTransaction(created.getId());
+		deleteDefaultTransaction();
 	}
 	
 	/**
@@ -115,13 +118,12 @@ public class TransactionWSTest extends AbstractTest
 		//Deleting test transaction
 		deleteTransaction(created1.getId());
 		deleteTransaction(created2.getId());
-
 	}
 
 	/**
 	 * Test if a transaction is created
 	 */
-	//@Test
+	@Test
 	@RunAsClient
 	public void createTransactionTest() {
 				
@@ -156,7 +158,7 @@ public class TransactionWSTest extends AbstractTest
 	/**
 	 * Test if a transaction can be obtained by its id
 	 */
-	//@Test
+	@Test
 	@RunAsClient
 	public void getTransactionTest() {
 				
@@ -188,7 +190,7 @@ public class TransactionWSTest extends AbstractTest
 	 * 
 	 * Test if a transaction is updated 
 	 */
-	//@Test
+	@Test
 	@RunAsClient
 	public void updateTransactionTest() {
 		
@@ -202,7 +204,7 @@ public class TransactionWSTest extends AbstractTest
 		
 		//Creating test transaction
 		Transaction transaction = createTransaction();
-
+		
 		transaction.setDate(newCreation);
 		transaction.setAccount(newAccount);
 		transaction.setTransactionDate(newCreation);
@@ -235,7 +237,7 @@ public class TransactionWSTest extends AbstractTest
 	 *	Test if a transaction is deleted 
 	 * 
 	 */
-	//@Test
+	@Test
 	@RunAsClient
 	public void deleteTransactionTest() {
 		// Creating test transaction
@@ -256,35 +258,58 @@ public class TransactionWSTest extends AbstractTest
 
 	}
 	
-	/**
-	 * 
-	 * @return the created entity pojo
-	 */
-	private Transaction createTransactionEntity(){
-		
+	private Currency createDefaultCurrency()
+	{
 		defaultCurrency.setExchangerate(2.0);
 		defaultCurrency.setSymbol("USD");
+		defaultCurrency.setId(defaultID);
 		defaultCurrency = currencyController.create(defaultCurrency);
 		
+		return defaultCurrency;
+	}
+	
+	private Role createDefaultRole()
+	{
 		defaultRole.setName("User");
+		defaultRole.setId(defaultID);
 		defaultRole = roleController.create(defaultRole);
 		
+		return defaultRole;
+	}
+	
+	private Customer createDefaultCustomer()
+	{
 		defaultCustomer.setFirstName("Customer1");
 		defaultCustomer.setLastName("LastName");
 		defaultCustomer.setLogin("c1login");
 		defaultCustomer.setPassword("c1pwd");
-		defaultCustomer.setRole(defaultRole);
+		defaultCustomer.setId(defaultID);
+		defaultCustomer.setRole(createDefaultRole());//(defaultRole);
 		defaultCustomer = customerController.create(defaultCustomer);
 		
+		return defaultCustomer;
+	}
+	
+	private Account createDefaultAccount()
+	{
 		defaultAccount.setAmount(100d);
 		defaultAccount.setCreationDate(new Date());
-		defaultAccount.setCurrency(defaultCurrency);
-		defaultAccount.setCustomer(defaultCustomer);
+		defaultAccount.setCurrency(createDefaultCurrency());//(defaultCurrency);
+		defaultAccount.setCustomer(createDefaultCustomer());//(defaultCustomer);
 		defaultAccount.setDeleted(0);
 		defaultAccount.setIban("0000000000");
-		defaultAccount.setId(99L);
+		defaultAccount.setId(defaultID);
 		
-		defaultAccount = accountController.create(defaultAccount);
+		return defaultAccount;
+	}
+	
+	/**
+	 * 
+	 * @return the created entity pojo
+	 */
+	private Transaction createTransactionEntity()
+	{	
+		defaultAccount = accountController.create(createDefaultAccount());
 		
 		Transaction transaction = new Transaction();
 		transaction.setDate(creationDate);
@@ -298,6 +323,7 @@ public class TransactionWSTest extends AbstractTest
 		transaction.setCreationDate(creationDate);
 		
 		//accountController.delete(99);
+		
 		return transaction;
 	}
 	
@@ -310,6 +336,18 @@ public class TransactionWSTest extends AbstractTest
 		Response resp = target(serviceRelativePath).post(json(transaction));
 		Transaction created = resp.readEntity(Transaction.class);
 		return created;
+	}
+	
+	/**
+	 * 
+	 * Deletes the default transaction
+	 */
+	private void deleteDefaultTransaction()
+	{
+		accountController.delete(defaultID);
+		customerController.delete(defaultID);
+		roleController.delete(defaultID);
+		currencyController.delete(defaultID);
 	}
 	
 	/**
