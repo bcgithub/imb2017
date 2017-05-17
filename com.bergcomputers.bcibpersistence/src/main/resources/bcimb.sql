@@ -68,7 +68,7 @@ FOREIGN KEY (currencyid)
 REFERENCES Currency(id)
 );
 
-CREATE TABLE TransactionTbl (id BIGINT NOT NULL, accountid BIGINT NOT NULL, date TIMESTAMP, type VARCHAR(255), amount DOUBLE, sender VARCHAR(255), details VARCHAR(255), status VARCHAR(255),
+CREATE TABLE TransactionTbl (id BIGINT NOT NULL, accountid BIGINT NOT NULL, date TIMESTAMP, transactiontype VARCHAR(255), amount DOUBLE, sender VARCHAR(255), details VARCHAR(255), status VARCHAR(255),
 FOREIGN KEY (id)
         REFERENCES BaseEntity(id)
         ON DELETE CASCADE,

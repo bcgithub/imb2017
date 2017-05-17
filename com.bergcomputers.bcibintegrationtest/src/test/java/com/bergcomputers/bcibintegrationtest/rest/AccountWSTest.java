@@ -112,6 +112,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		
 			//Deleting test account
 			deleteAccount((accountsNewList.get(0).getId()));
+			
 
 		}
 		
@@ -148,7 +149,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		@RunAsClient
 		public void updateAccountTest() {
 			Date newCreation = new Date();
-			String newIban="";
+			String newIban="IBAN1278DE";
 			Double newAmount=3.0d;
 			
 			//Creating test account
@@ -183,7 +184,6 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			// existing accounts
 			List<Account> accounts = getAccounts();
 			
-			
 			//delete test account
 			target(serviceRelativePath + accounts.get(0).getId()).delete();
 			
@@ -192,6 +192,28 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			
 			//check the list size to be decrease by one
 			assertEquals(accounts.size() - 1, accountsNewList.size() );
+
+		}
+		
+		/**
+		 *	Test if an account is deleted 
+		 * 
+		 */
+		@Test
+		@RunAsClient
+		public void deleteAccountNoIdTest() {
+			
+			// existing accounts
+			List<Account> accounts = getAccounts();
+			
+			//delete test account
+			target(serviceRelativePath + "-1").delete();
+			
+			// new accounts list
+			List<Account> accountsNewList = getAccounts();
+			
+			//check the list size to be decrease by one
+			assertEquals(accounts.size(), accountsNewList.size() );
 
 		}
 		

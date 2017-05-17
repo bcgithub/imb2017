@@ -19,6 +19,7 @@ import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 
+import com.bergcomputers.domain.Currency;
 import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.CustomerController;
 import com.bergcomputers.ejb.ICustomerController;
@@ -36,10 +37,10 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	private GenericType<List<Customer>> genericListType = new GenericType<List<Customer>>() {};
 
 	private String role;
-	private String firstName;
-	private String lastName;
-	private String login;
-	private String password;
+	private String firstName="firstName";
+	private String lastName="lastName";
+	private String login="Login";
+	private String password="Password";
 	
 	private Date creationDate = new Date();
 	
@@ -47,8 +48,175 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	 private ICustomerController customerContoller;
 	 
 	@Deployment
-	public static WebArchive createDeployment() {
+	public static WebArchive createDeployment() 
+	{
 		return buildArchive().addPackage(CustomerResource.class.getPackage()).addPackage(Customer.class.getPackage())
 				.addPackage(CustomerController.class.getPackage()).addClass(CustomerResource.class);
+	}
+	
+	public void getCustomersTest() 
+	{
+		Customer created = createCustomer();
+		List<Customer> customers = target(serviceRelativePath).accept(jsonFormat).get(genericListType);
+		assertEquals(1, customers.size());
+		deleteCustomer(created.getId());
+	}
+	
+	@Test
+	@RunAsClient
+	public void getCustomersPaginationTest() 
+	{
+		Customer created1 = createCustomer();
+		Customer created2 = createCustomer();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", 1);
+        params.put("size", 1);
+        
+		List<Customer> customers = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, customers.size());
+		assertEquals(created1.getId(), customers.get(0).getId());
+        params.put("page", 2);
+        customers = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, customers.size());
+		assertEquals(created2.getId(), customers.get(0).getId());
+		
+		//Deleting test currency
+		deleteCustomer(created1.getId());
+		deleteCustomer(created2.getId());
+
+	}
+	
+	@Test
+	@RunAsClient
+	public void createCustomerTest() 
+	{
+		
+		//existing currencies
+		List<Customer> customers = getCustomers();
+
+		//Creating test currency
+		Customer customer = createCustomer();
+		Response resp = target(serviceRelativePath).post(json(customer));
+		Customer created = resp.readEntity(Customer.class);
+
+		//Getting list of currencies
+		List<Customer> customersNewList = getCustomers();
+		
+		//check the list size to be increased by one
+		assertEquals(customers.size() +1, customersNewList.size() );
+		
+		assertEquals(customer.getFirstName(), created.getFirstName());
+		assertEquals(customer.getLastName(), created.getLastName());
+		assertEquals(customer.getLogin(), created.getLogin());
+		assertEquals(customer.getPassword(), created.getPassword());
+		assertEquals(customer.getCreationDate(), created.getCreationDate());
+		
+		//Deleting test currency
+		deleteCustomer(customersNewList.get(0).getId());
+
+	}
+	
+	@Test
+	@RunAsClient
+	public void getCustomerTest() {
+				
+		//Creating test currency
+		Customer customer = createCustomer();
+		Response resp = target(serviceRelativePath).post(json(customer));
+		Customer created = resp.readEntity(Customer.class);
+		
+		resp = target(serviceRelativePath+created.getId()).get();
+		Customer obtained = resp.readEntity(Customer.class);
+		
+		assertEquals(obtained.getId(), created.getId());
+		assertEquals(customer.getFirstName(), created.getFirstName());
+		assertEquals(customer.getLastName(), created.getLastName());
+		assertEquals(customer.getLogin(), created.getLogin());
+		assertEquals(customer.getPassword(), created.getPassword());
+		assertEquals(obtained.getCreationDate(), created.getCreationDate());
+		
+		//Deleting test currency
+		deleteCustomer(created.getId());
+
+	}
+	
+	@Test
+	@RunAsClient
+	public void updateCustomerTest() 
+	{
+		Date newCreation = new Date();
+		
+		//Creating test currency
+		Customer customer = createCustomer();
+
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
+		customer.setLogin(login);
+		customer.setPassword(password);
+		customer.setCreationDate(newCreation);
+		
+		Response resp = target(serviceRelativePath).put(json(customer));
+		Customer updated = resp.readEntity(Customer.class);
+		
+		assertEquals(customer.getId(), updated.getId());
+		assertEquals(firstName, updated.getFirstName());
+		assertEquals(lastName, updated.getLastName());
+		assertEquals(login, updated.getLogin());
+		assertEquals(password, updated.getPassword());
+		assertEquals(newCreation, updated.getCreationDate());
+		
+		//Deleting test currency
+		deleteCustomer(customer.getId());
+
+	}
+	
+	@Test
+	@RunAsClient
+	public void deleteCustomerTest() 
+	{
+		// Creating test currency
+		createCustomer();
+		
+		// existing currencies
+		List<Customer> customers = getCustomers();
+		
+		
+		//delete test currency
+		target(serviceRelativePath + customers.get(0).getId()).delete();
+		
+		// new currencies list
+		List<Customer> customersNewList = getCustomers();
+		
+		//check the list size to be decrease by one
+		assertEquals(customers.size() - 1, customersNewList.size() );
+
+	}
+	
+	private Customer createCustomerEntity(){
+		Customer customer = new Customer();
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
+		customer.setLogin(login);
+		customer.setPassword(password);
+		customer.setCreationDate(creationDate);
+		return customer;
+	}
+	
+	
+	
+	private Customer createCustomer(){
+		Customer customer = createCustomerEntity();
+		Response resp = target(serviceRelativePath).post(json(customer));
+		Customer created = resp.readEntity(Customer.class);
+		return created;
+	}
+	
+	private List<Customer> getCustomers(){
+		return target(serviceRelativePath).accept(jsonFormat).get(genericListType);
+	}
+	
+	private void deleteCustomer(Long id)
+	{
+		target(serviceRelativePath + id).delete();
 	}
 }

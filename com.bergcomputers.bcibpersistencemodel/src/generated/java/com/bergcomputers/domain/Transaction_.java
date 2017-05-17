@@ -10,10 +10,10 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Transaction_ extends com.bergcomputers.domain.BaseEntity_ {
 
 	public static volatile SingularAttribute<Transaction, Date> date;
+	public static volatile SingularAttribute<Transaction, String> transactionType;
 	public static volatile SingularAttribute<Transaction, Double> amount;
 	public static volatile SingularAttribute<Transaction, String> sender;
 	public static volatile SingularAttribute<Transaction, String> details;
-	public static volatile SingularAttribute<Transaction, String> type;
 	public static volatile SingularAttribute<Transaction, Account> account;
 	public static volatile SingularAttribute<Transaction, String> status;
 
