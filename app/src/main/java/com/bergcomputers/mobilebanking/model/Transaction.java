@@ -17,6 +17,7 @@ import java.util.Date;
 
 public class Transaction extends BaseEntity implements Serializable, ITransaction  {
 
+    public static final String FIELD_ID="id";
     public static final String FIELD_DATE="date";
     public static final String FIELD_TRANSACTION_TYPE="type";
     public static final String FIELD_AMOUNT="amount";

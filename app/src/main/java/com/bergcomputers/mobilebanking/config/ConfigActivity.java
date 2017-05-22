@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.bergcomputers.mobilebanking.R;
+import com.bergcomputers.mobilebanking.beneficiary.BeneficiaryListActivity;
 import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.currency.CurrencyListActivity;
 
@@ -90,14 +91,15 @@ public class ConfigActivity extends BaseActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_devices) {
 
         } else if (id == R.id.nav_currencies) {
             Intent intent = new Intent(this, CurrencyListActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_beneficiaries) {
+            Intent intent = new Intent(this, BeneficiaryListActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
         }

@@ -1,41 +1,32 @@
-package com.bergcomputers.mobilebanking.currency;
+package com.bergcomputers.mobilebanking.account;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.bergcomputers.mobilebanking.R;
 import com.bergcomputers.mobilebanking.common.Util;
 import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.common.net.IJSONNetworkActivity;
 import com.bergcomputers.mobilebanking.common.net.JSONAsyncTask;
-import com.bergcomputers.mobilebanking.model.Currency;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * An activity representing a single Currency detail screen. This
+ * An activity representing a single Account detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link CurrencyListActivity}.
+ * in a {@link AccountListActivity}.
  */
-public class CurrencyDetailActivity extends BaseActivity implements IJSONNetworkActivity {
+public class AccountDetailActivity extends BaseActivity implements IJSONNetworkActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_currency_detail);
+        setContentView(R.layout.activity_account_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -64,8 +55,8 @@ public class CurrencyDetailActivity extends BaseActivity implements IJSONNetwork
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            Long currencyId = getIntent().getLongExtra(CurrencyDetailFragment.ARG_ITEM_ID, -1L);
-            new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_CURRENCIES+"/"+currencyId, this, 0).execute();
+            Long accountId = getIntent().getLongExtra(AccountDetailFragment.ARG_ITEM_ID, -1L);
+            new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_ACCOUNTS+"/"+accountId, this, 0).execute();
 
         }
     }
@@ -85,7 +76,7 @@ public class CurrencyDetailActivity extends BaseActivity implements IJSONNetwork
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, CurrencyListActivity.class));
+            navigateUpTo(new Intent(this, AccountListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -98,11 +89,11 @@ public class CurrencyDetailActivity extends BaseActivity implements IJSONNetwork
                 // Create the detail fragment and add it to the activity
                 // using a fragment transaction.
                 Bundle arguments = new Bundle();
-                arguments.putString(CurrencyDetailFragment.ARG_ITEM_ID, pJSONString);
-                CurrencyDetailFragment fragment = new CurrencyDetailFragment();
+                arguments.putString(AccountDetailFragment.ARG_ITEM_ID, pJSONString);
+                AccountDetailFragment fragment = new AccountDetailFragment();
                 fragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.currency_detail_container, fragment)
+                        .add(R.id.account_detail_container, fragment)
                         .commit();
 
         }

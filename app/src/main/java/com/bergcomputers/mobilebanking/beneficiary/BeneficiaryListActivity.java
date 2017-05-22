@@ -1,4 +1,4 @@
-package com.bergcomputers.mobilebanking.transaction;
+package com.bergcomputers.mobilebanking.beneficiary;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +20,8 @@ import com.bergcomputers.mobilebanking.common.Util;
 import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.common.net.IJSONNetworkActivity;
 import com.bergcomputers.mobilebanking.common.net.JSONAsyncTask;
-import com.bergcomputers.mobilebanking.currency.CurrencyDetailFragment;
-import com.bergcomputers.mobilebanking.model.Currency;
-import com.bergcomputers.mobilebanking.model.Transaction;
+import com.bergcomputers.mobilebanking.beneficiary.BeneficiaryDetailActivity;
+import com.bergcomputers.mobilebanking.model.Beneficiary;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,17 +29,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
 /**
  * An activity representing a list of Currencies. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link TransactionDetailActivity} representing
+ * lead to a {@link BeneficiaryDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class TransactionListActivity extends BaseActivity implements IJSONNetworkActivity{
+public class BeneficiaryListActivity extends BaseActivity implements IJSONNetworkActivity{
 
 
     /**
@@ -52,7 +50,7 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transaction_list);
+        setContentView(R.layout.activity_beneficiary_list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,15 +70,15 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //View recyclerView = findViewById(R.id.currency_list);
+        //View recyclerView = findViewById(R.id.beneficiary_list);
         //assert recyclerView != null;
 
         //load the data from the backend
-        new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_TRANSACTIONS, this, 0).execute();
+        new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_BENEFICIARIES, this, 0).execute();
 
         //setupRecyclerView((RecyclerView) recyclerView);
 
-        if (findViewById(R.id.transaction_detail_container) != null) {
+        if (findViewById(R.id.beneficiary_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
@@ -114,21 +112,18 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
     @Override
     public void handleResult(String pJSONString, int currentAction) {
         if (null != pJSONString){
-            List<Transaction> currencies = new ArrayList<>();
+            List<Beneficiary> currencies = new ArrayList<>();
             try {
                 JSONArray jsonArray = new JSONArray(pJSONString);
                 for(int i=0; i< jsonArray.length();i++){
                     JSONObject jsonObj = (JSONObject)jsonArray.get(i);
-                    Transaction transaction = new Transaction();
-                    transaction.setTransactionType(jsonObj.getString(Transaction.FIELD_TRANSACTION_TYPE));
-                    transaction.setDate(new Date(jsonObj.getInt(Transaction.FIELD_DATE)));
-                    transaction.setAmount(jsonObj.getDouble(Transaction.FIELD_AMOUNT));
-                    transaction.setSender(jsonObj.getString(Transaction.FIELD_SENDER));
-                    transaction.setAmount(jsonObj.getDouble(Transaction.FIELD_AMOUNT));
-                    transaction.setDetails(jsonObj.getString(Transaction.FIELD_DETAILS));
-                    transaction.setStatus(jsonObj.getString(Transaction.FIELD_STATUS));
-
-                    currencies.add(transaction);
+                    Beneficiary beneficiary = new Beneficiary();
+                    beneficiary.setId(jsonObj.getLong(Beneficiary.FIELD_ID));
+                    beneficiary.setIban(jsonObj.getString(Beneficiary.FIELD_IBAN));
+                    beneficiary.setName(jsonObj.getString(Beneficiary.FIELD_NAME));
+                    beneficiary.setDetails(jsonObj.getString(Beneficiary.FIELD_DETAILS));
+                    beneficiary.setAccountHolder(jsonObj.getString(Beneficiary.FIELD_ACCOUNTHOLDER));
+                    currencies.add(beneficiary);
 
                 }
             } catch (JSONException e) {
@@ -136,7 +131,7 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
                 e.printStackTrace();
             }
 
-            View recyclerView = findViewById(R.id.transaction_list);
+            View recyclerView = findViewById(R.id.beneficiary_list);
             assert recyclerView != null;
 
             ((RecyclerView)recyclerView).setAdapter(new SimpleItemRecyclerViewAdapter(currencies));
@@ -146,40 +141,42 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Transaction> mValues;
+        private final List<Beneficiary> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Transaction> items) {
+        public SimpleItemRecyclerViewAdapter(List<Beneficiary> items) {
             mValues = items;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.transaction_list_content, parent, false);
+                    .inflate(R.layout.beneficiary_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getDate().toString());
-            holder.mContentView.setText(mValues.get(position).getDetails());
+            holder.mContentView.setText(mValues.get(position).getIban().toString());
+            holder.mContentView.setText(mValues.get(position).getName().toString());
+            holder.mContentView.setText(mValues.get(position).getDetails().toString());
+            holder.mContentView.setText(mValues.get(position).getAccountHolder().toString());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(TransactionDetailFragment.ARG_ITEM_ID, holder.mItem.getId().toString());
-                        TransactionDetailFragment fragment = new TransactionDetailFragment();
+                        arguments.putString(BeneficiaryDetailFragment.ARG_ITEM_ID, holder.mItem.getId().toString());
+                        BeneficiaryDetailFragment fragment = new BeneficiaryDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.transaction_detail_container, fragment)
+                                .replace(R.id.beneficiary_detail_container, fragment)
                                 .commit();
                     } else {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, TransactionDetailActivity.class);
-                        intent.putExtra(TransactionDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
+                        Intent intent = new Intent(context, BeneficiaryDetailActivity.class);
+                        intent.putExtra(BeneficiaryDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
 
                         context.startActivity(intent);
                     }
@@ -196,7 +193,7 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public Transaction mItem;
+            public Beneficiary mItem;
 
             public ViewHolder(View view) {
                 super(view);

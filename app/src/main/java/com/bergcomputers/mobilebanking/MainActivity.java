@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.bergcomputers.mobilebanking.account.AccountListActivity;
 import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.config.ConfigActivity;
 import com.bergcomputers.mobilebanking.currency.CurrencyListActivity;
+import com.bergcomputers.mobilebanking.transaction.TransactionListActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -24,12 +26,16 @@ public class MainActivity extends BaseActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_accounts:
                     mTextMessage.setText(R.string.title_accounts);
+                    Intent configIntentA = new Intent(MainActivity.this, AccountListActivity.class);
+                    startActivity(configIntentA);
                     return true;
                 case R.id.navigation_payment:
                     mTextMessage.setText(R.string.title_payment);
                     return true;
                 case R.id.navigation_pending:
                     mTextMessage.setText(R.string.title_pending);
+                    Intent configIntentT = new Intent(MainActivity.this, TransactionListActivity.class);
+                    startActivity(configIntentT);
                     return true;
                 case R.id.navigation_config:
                     mTextMessage.setText(R.string.title_config);
