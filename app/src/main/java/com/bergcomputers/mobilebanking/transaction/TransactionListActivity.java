@@ -162,8 +162,11 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getDate().toString());
-            holder.mContentView.setText(mValues.get(position).getDetails());
+            holder.mTransactionTypeView.setText(mValues.get(position).getTransactionType().toString());
+            holder.mDateView.setText(mValues.get(position).getDate().toString());
+            holder.mSenderView.setText(mValues.get(position).getSender().toString());
+            holder.mAmountView.setText(mValues.get(position).getAmount().toString());
+            
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -194,20 +197,24 @@ public class TransactionListActivity extends BaseActivity implements IJSONNetwor
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView mTransactionTypeView;
+            public final TextView mDateView;
+            public final TextView mSenderView;
+            public final TextView mAmountView;
             public Transaction mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mTransactionTypeView= (TextView) view.findViewById(R.id.transaction_type);
+                mDateView = (TextView) view.findViewById(R.id.date);
+                mSenderView = (TextView) findViewById(R.id.sender);
+                mAmountView = (TextView) findViewById(R.id.amount);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mTransactionTypeView.getText() + "  sender: "+mSenderView.getText() ;
             }
         }
     }

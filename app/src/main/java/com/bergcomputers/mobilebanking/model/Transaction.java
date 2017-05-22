@@ -31,10 +31,7 @@ public class Transaction extends BaseEntity implements Serializable, ITransactio
 
 
     private Date date;
-
-
     private Account account;
-
     private String transactionType;
     private Double amount;
     private String sender;

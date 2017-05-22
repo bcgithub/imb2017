@@ -21,6 +21,8 @@ import com.bergcomputers.mobilebanking.model.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * A fragment representing a single Transaction detail screen.
  * This fragment is either contained in a {@link TransactionListActivity}
@@ -60,10 +62,15 @@ public class TransactionDetailFragment extends Fragment {
             mItem = new Transaction();
             try {
                 JSONObject jsonObj = new JSONObject(pJSONString);
+
                 mItem.setId(jsonObj.getLong(Transaction.FIELD_ID));
-                //mItem.setDate(jsonObj.get(Transaction.FIELD_DATE));
+                mItem.setDate(new Date(jsonObj.getLong(Transaction.FIELD_DATE)));
                 mItem.setDetails(jsonObj.getString(Transaction.FIELD_DETAILS));
                 mItem.setAmount(jsonObj.getDouble(Transaction.FIELD_AMOUNT));
+                mItem.setTransactionType(jsonObj.getString(Transaction.FIELD_TRANSACTION_TYPE));
+                mItem.setSender(jsonObj.getString(Transaction.FIELD_SENDER));
+                mItem.setStatus(jsonObj.getString(Transaction.FIELD_STATUS));
+
 
             } catch (JSONException e) {
                 e.printStackTrace();

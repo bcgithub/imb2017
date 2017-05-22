@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/transaction_type"
+        android:text="type"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/date"
+        android:text="date"
+        android:layout_below="@+id/transaction_type"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
-</LinearLayout>
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/sender"
+        android:text="sender"
+        android:layout_toRightOf="@+id/transaction_type"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/amount"
+        android:text="amount"
+        android:layout_toRightOf="@id/date"
+        android:layout_below="@id/sender"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
