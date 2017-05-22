@@ -84,6 +84,82 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			deleteAccount(created2.getId());
 
 		}
+		@Test
+//		@RunAsClient
+		public void getAccountsNoPaginationTest() {
+			Account created1 = createAccount();
+		//	Account created2 = createAccount();
+			Map<String, Object> params = new HashMap<>();
+	        params.put("page",-1);
+	        params.put("size", 1);
+	        try{
+			List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+			assertEquals(1, accounts.size());
+			assertEquals(created1.getId(), accounts.get(0).getId());
+	        }finally{
+			//Deleting test currency
+			deleteAccount(created1.getId());
+	        }
+
+		}
+		@Test
+//		@RunAsClient
+		public void getAccountsNullPaginationTest() {
+			Account created1 = createAccount();
+		//	Account created2 = createAccount();
+			Map<String, Object> params = new HashMap<>();
+	        params.put("page",null);
+	        params.put("size", 1);
+	        try{
+			List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+			assertEquals(1, accounts.size());
+			assertEquals(created1.getId(), accounts.get(0).getId());
+	        }finally{
+			//Deleting test currency
+			deleteAccount(created1.getId());
+	        }
+
+		}
+		@Test
+	//	@RunAsClient
+		public void getAccountsNoSizePaginationTest() {
+			Account created1 = createAccount();
+		//	Account created2 = createAccount();
+			Map<String, Object> params = new HashMap<>();
+	        params.put("page", 1);
+	        params.put("size", -1);
+	        
+			List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+			try{
+			assertEquals(1, accounts.size());
+			assertEquals(created1.getId(), accounts.get(0).getId());
+			}finally{
+			//Deleting test currency
+			deleteAccount(created1.getId());
+
+			}
+
+		}
+		@Test
+		//	@RunAsClient
+			public void getAccountsNullSizePaginationTest() {
+				Account created1 = createAccount();
+			//	Account created2 = createAccount();
+				Map<String, Object> params = new HashMap<>();
+		        params.put("page", 1);
+		       // params.put("size", null);
+		        
+				List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+				try{
+				assertEquals(1, accounts.size());
+				assertEquals(created1.getId(), accounts.get(0).getId());
+				}finally{
+				//Deleting test currency
+				deleteAccount(created1.getId());
+
+				}
+
+			}
 		
 		/**
 		 * Test if an account is created
