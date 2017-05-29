@@ -103,7 +103,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		List<Customer> customersNewList = getCustomers();
 		
 		//check the list size to be increased by one
-		assertEquals(customers.size() +1, customersNewList.size() );
+		assertEquals(customers.size() +2, customersNewList.size() );
 		
 		assertEquals(customer.getFirstName(), created.getFirstName());
 		assertEquals(customer.getLastName(), created.getLastName());
@@ -120,7 +120,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	@RunAsClient
 	public void getCustomerTest() {
 				
-		//Creating test currency
+		//Creating test customer
 		Customer customer = createCustomer();
 		Response resp = target(serviceRelativePath).post(json(customer));
 		Customer created = resp.readEntity(Customer.class);
@@ -135,9 +135,8 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		assertEquals(customer.getPassword(), created.getPassword());
 		assertEquals(obtained.getCreationDate(), created.getCreationDate());
 		
-		//Deleting test currency
+		//Deleting test customer
 		deleteCustomer(created.getId());
-
 	}
 	
 	@Test
@@ -169,7 +168,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		deleteCustomer(customer.getId());
 
 	}
-	
+		
 	@Test
 	@RunAsClient
 	public void deleteCustomerTest() 
