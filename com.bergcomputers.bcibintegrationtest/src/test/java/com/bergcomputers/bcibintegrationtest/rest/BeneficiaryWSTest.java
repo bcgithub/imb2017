@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.bergcomputers.domain.Beneficiary;
@@ -86,8 +87,8 @@ public class BeneficiaryWSTest extends AbstractTest {
 		Beneficiary created1 = createBeneficiary();
 		Beneficiary created2 = createBeneficiary();
 		Map<String, Object> params = new HashMap<>();
-		params.put("page", 1);
-		params.put("size", 1);
+		params.put("page", 1);	//fara 1
+		params.put("size", 1);	// fara 2 , //cu -1 dar si la page
 
 		List<Beneficiary> beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
 		assertEquals(1, beneficiaries.size());
@@ -102,6 +103,90 @@ public class BeneficiaryWSTest extends AbstractTest {
 		deleteBeneficiary(created2.getId());
 
 	}
+	
+	@Test
+	public void getBeneficiariesPaginationTestNoPage() {
+	Beneficiary created1 = createBeneficiary();
+	//Beneficiary created2 = createBeneficiary();
+	Map<String, Object> params = new HashMap<>();
+	//params.put("page", 1);	//fara 1
+	params.put("size", 1);	// fara 2 , //cu -1 dar si la page
+
+	List<Beneficiary> beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+	assertEquals(1, beneficiaries.size());
+	assertEquals(created1.getId(), beneficiaries.get(0).getId());
+//	params.put("page", 2);
+	/*beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+	assertEquals(1, beneficiaries.size());
+	assertEquals(created2.getId(), beneficiaries.get(0).getId());*/
+
+	// Deleting test beneficiary
+	deleteBeneficiary(created1.getId());
+	//deleteBeneficiary(created2.getId());
+
+	}
+	
+	@Test
+	public void getBeneficiariesPaginationTestNoSize() {
+	//	Beneficiary created1 = createBeneficiary();
+	//	Beneficiary created2 = createBeneficiary();
+		Map<String, Object> params = new HashMap<>();
+		params.put("page", 1);	//fara 1
+		//params.put("size", 1);	// fara 2 , //cu -1 dar si la page
+		
+		List<Beneficiary> beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(0, beneficiaries.size());
+		//assertEquals(created1.getId(), beneficiaries.get(0).getId());
+//		params.put("page", 2);
+		beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(0, beneficiaries.size());
+	//	assertEquals(created2.getId(), beneficiaries.get(0).getId());
+
+		// Deleting test beneficiary
+		//deleteBeneficiary(created1.getId());
+		//deleteBeneficiary(created2.getId());
+
+	}
+	
+	@Test
+	public void getBeneficiariesPaginationTestNotRange() {
+		Map<String, Object> params = new HashMap<>();
+		params.put("page",-1);
+		params.put("size",-1); 
+
+		List<Beneficiary> beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(0, beneficiaries.size());
+		//params.put("page", 1);
+		beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(0, beneficiaries.size());
+
+		// Deleting test beneficiary
+
+	}
+	@Test
+	public void getBeneficiariesPaginationTestSizeNotRange() {
+		Beneficiary created1 = createBeneficiary();
+		Beneficiary created2 = createBeneficiary();
+		Map<String, Object> params = new HashMap<>();
+		params.put("page", 1);	//fara 1
+		params.put("size", -1);	// fara 2 , //cu -1 dar si la page
+
+		List<Beneficiary> beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, beneficiaries.size());
+		assertEquals(created1.getId(), beneficiaries.get(0).getId());
+		params.put("page", 2);
+		beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, beneficiaries.size());
+		assertEquals(created2.getId(), beneficiaries.get(0).getId());
+
+		// Deleting test beneficiary
+		deleteBeneficiary(created1.getId());
+		deleteBeneficiary(created2.getId());
+
+	}
+
+
+
 
 	/**
 	 * Test if a beneficiary is created
@@ -133,6 +218,19 @@ public class BeneficiaryWSTest extends AbstractTest {
 
 	}
 
+	@Test
+		public void createBeneficiaryNullTest() {
+		
+		try{
+		beneficiaryController.create(null);
+		Assert.fail("Should throw an exception");
+		} 
+		catch (Exception e)
+		{
+			Assert.assertTrue(true);
+		}
+	}
+	
 	@Test
 	public void createBeneficiaryTestNoCreationDate() {
 
@@ -252,7 +350,7 @@ public class BeneficiaryWSTest extends AbstractTest {
 
 		// delete test beneficiary
 		//IndexOutOfBounds
-		//target(serviceRelativePath + beneficiaries.get(-1).getId()).delete();
+		target(serviceRelativePath + "-1").delete();
 
 
 		// new beneficiaries list
