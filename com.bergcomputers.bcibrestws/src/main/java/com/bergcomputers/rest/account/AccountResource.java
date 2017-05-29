@@ -24,8 +24,10 @@ import org.jboss.logging.Logger;
 
 import com.bergcomputers.domain.Account;
 import com.bergcomputers.domain.Currency;
+import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.IAccountController;
 import com.bergcomputers.ejb.ICurrencyController;
+import com.bergcomputers.ejb.ICustomerController;
 import com.bergcomputers.rest.AbstractResource;
 import com.bergcomputers.rest.currency.CurrencyResource;
 import com.bergcomputers.rest.util.HeaderUtil;
@@ -42,12 +44,22 @@ public class AccountResource extends AbstractResource{
     private UriInfo uriInfo;
 	@EJB
 	private IAccountController accountController;
+	@EJB
+	private ICustomerController customerController;
+	
 	
     @GET
     @Produces("application/json")
     @Path("/{accountid}")
     public Account findAccount(@PathParam("accountid") Long accountid){
     	return accountController.find(accountid);
+    }
+    
+    @GET
+    @Produces("application/json")
+    @Path("/customer/{customerid}")
+    public List<Account> findAccountsForCustomers(@PathParam("customerid") Long customerid){
+    	return accountController.getAccountForCustomer(customerid);
     }
     
     /**

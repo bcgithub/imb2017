@@ -20,8 +20,11 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 
 import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.AccountController;
+import com.bergcomputers.ejb.CustomerController;
 import com.bergcomputers.ejb.IAccountController;
+import com.bergcomputers.ejb.ICustomerController;
 import com.bergcomputers.rest.account.AccountResource;
 
 public class AccountWSTest extends AbstractTest{
@@ -39,6 +42,8 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	
 	 @Inject
 	 private IAccountController accountContoller;
+	 @Inject
+	 private ICustomerController customerController;
 	 
 	 @Deployment
 		public static WebArchive createDeployment() {
@@ -287,6 +292,37 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 
 		}
 		
+		@Test
+		//@RunAsClient
+		public void getAccountForCustomerTest(){
+			Date newCreation = new Date();
+			String newIban="IBAN1278DE";
+			Double newAmount=3.0d;
+			
+			//Creating test customer
+			Customer customer=new Customer();
+			customer.setCreationDate(newCreation);
+			customer.setDeleted(0);
+			customer.setId((long) 1234);
+			customer = customerController.create(customer);
+		
+			Account account = createAccountEntity();
+			account.setCustomer(customer);
+			
+			Response resp = target(serviceRelativePath).put(json(account));
+			Account accounts = resp.readEntity(Account.class);
+			
+			
+			assertEquals(account.getId(), accounts.getId());
+			assertEquals(newIban,accounts.getIban());
+			assertEquals(newAmount, accounts.getAmount());
+			assertEquals(newCreation, accounts.getCreationDate());
+			
+			deleteAccount(account.getId());
+			customerController.delete(customer.getId());
+						
+		} 
+		
 		/**
 		 *	Test if an account is deleted 
 		 * 
@@ -381,4 +417,6 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		private void deleteAccount(Long id){
 			target(serviceRelativePath + id).delete();
 		}
+		
+
 }
