@@ -10,8 +10,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bergcomputers.mobilebanking.R;
+import com.bergcomputers.mobilebanking.common.Util;
+import com.bergcomputers.mobilebanking.common.net.IJSONNetworkActivity;
+import com.bergcomputers.mobilebanking.common.net.JSONAsyncTask;
 import com.bergcomputers.mobilebanking.model.Account;
+import com.bergcomputers.mobilebanking.model.Currency;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +26,7 @@ import org.json.JSONObject;
  * in two-pane mode (on tablets) or a {@link AccountDetailActivity}
  * on handsets.
  */
-public class AccountDetailFragment extends Fragment {
+public class AccountDetailFragment extends Fragment implements IJSONNetworkActivity{
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -50,6 +55,8 @@ public class AccountDetailFragment extends Fragment {
             // to load content from a content provider.
             //mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
             String pJSONString = getArguments().getString(ARG_ITEM_ID);
+            new JSONAsyncTask(Util.BASE_URL + Util.URL_GET_ACCOUNTS + pJSONString , this, 0).execute();
+
             System.out.println(pJSONString);
             mItem = new Account();
             try {
@@ -57,6 +64,8 @@ public class AccountDetailFragment extends Fragment {
                 mItem.setId(jsonObj.getLong(Account.FIELD_ID));
                 mItem.setIban(jsonObj.getString(Account.FIELD_IBAN));
                 mItem.setAmount(jsonObj.getDouble(Account.FIELD_AMOUNT));
+                mItem.setSymbol(jsonObj.getString(Account.FIELD_SYMBOL));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -65,6 +74,26 @@ public class AccountDetailFragment extends Fragment {
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.getIban());
+            }
+        }
+    }
+    @Override
+    public void handleResult(String pJSONString, int currentAction)
+    {
+        if(pJSONString != null)
+        {
+            try
+            {
+                JSONObject jsonObj = new JSONObject(pJSONString);
+                Account account = new Account();
+                account.setId(jsonObj.getLong((Account.FIELD_ID)));
+                account.setIban(jsonObj.getString(Account.FIELD_IBAN));
+                account.setAmount(jsonObj.getDouble(Account.FIELD_AMOUNT));
+                JSONObject currency = jsonObj.getJSONObject("currency");
+                account.setSymbol(currency.getString((Account.FIELD_SYMBOL)));
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
     }

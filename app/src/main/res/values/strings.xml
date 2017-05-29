@@ -8,6 +8,7 @@
     <string name="title_config">Config</string>
     <string name="title_currency_list">Currencies</string>
     <string name="title_currency_detail">Currency Detail</string>
+    <string name="title_account_detail">Account Detail</string>
     <string name="buttonNo">No</string>
     <string name="buttonYes">Yes</string>
     <string name="buttonOk">Ok</string>

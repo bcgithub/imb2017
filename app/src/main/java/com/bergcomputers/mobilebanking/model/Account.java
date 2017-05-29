@@ -10,14 +10,15 @@ public class Account extends BaseEntity {
     public static final String FIELD_ID="id";
     public static final String FIELD_IBAN="iban";
     public static final String FIELD_AMOUNT="amount";
+    public static final String FIELD_SYMBOL="symbol";
 
     private String iban;
-
     private Double amount;
+    private String symbol;
 
     @Override
     public String toString() {
-        return "Account [iban=" + iban + ", amount=" + amount + "]";
+        return "Account [iban=" + iban + ", amount=" + amount + ", symbol=" + symbol + "]";
     }
 
     @Override
@@ -49,6 +50,11 @@ public class Account extends BaseEntity {
                 return false;
         } else if (!iban.equals(other.iban))
             return false;
+        if (symbol == null) {
+            if (other.symbol != null)
+                return false;
+        } else if (!symbol.equals(other.symbol))
+            return false;
         return true;
     }
 
@@ -67,5 +73,9 @@ public class Account extends BaseEntity {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+    public String getSymbol() { return symbol; }
+
+    public void setSymbol(String symbol) { this.symbol = symbol; }
 }
 

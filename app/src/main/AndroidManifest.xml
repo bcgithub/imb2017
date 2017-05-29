@@ -32,7 +32,7 @@
 
         <activity
             android:name=".account.AccountListActivity"
-            android:label="@string/title_activity_config"
+            android:label="@string/title_accounts"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -42,7 +42,7 @@
 
         <activity
             android:name=".account.AccountDetailActivity"
-            android:label="@string/title_currency_detail"
+            android:label="@string/title_account_detail"
             android:parentActivityName=".account.AccountListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

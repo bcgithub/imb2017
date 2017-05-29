@@ -22,6 +22,7 @@ import com.bergcomputers.mobilebanking.common.activity.BaseActivity;
 import com.bergcomputers.mobilebanking.common.net.IJSONNetworkActivity;
 import com.bergcomputers.mobilebanking.common.net.JSONAsyncTask;
 import com.bergcomputers.mobilebanking.model.Account;
+import com.bergcomputers.mobilebanking.model.Currency;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,14 +118,15 @@ public class AccountListActivity extends BaseActivity implements IJSONNetworkAct
             List<Account> accounts = new ArrayList<>();
             try {
                 JSONArray jsonArray = new JSONArray(pJSONString);
-                for(int i=0; i< jsonArray.length();i++){
+                for(int i=0; i < jsonArray.length();i++){
                     JSONObject jsonObj = (JSONObject)jsonArray.get(i);
                     Account account = new Account();
                     account.setId(jsonObj.getLong(Account.FIELD_ID));
                     account.setIban(jsonObj.getString(Account.FIELD_IBAN));
                     account.setAmount(jsonObj.getDouble(Account.FIELD_AMOUNT));
+                    JSONObject currency = jsonObj.getJSONObject("currency");
+                    account.setSymbol(currency.getString((Account.FIELD_SYMBOL)));
                     accounts.add(account);
-
                 }
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
@@ -135,6 +137,13 @@ public class AccountListActivity extends BaseActivity implements IJSONNetworkAct
             assert recyclerView != null;
 
             ((RecyclerView)recyclerView).setAdapter(new SimpleItemRecyclerViewAdapter(accounts));
+
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            };
         }
     }
 
@@ -159,6 +168,7 @@ public class AccountListActivity extends BaseActivity implements IJSONNetworkAct
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).getIban());
             holder.mContentView.setText(mValues.get(position).getAmount().toString());
+            holder.mCurrencyView.setText(mValues.get(position).getSymbol());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -191,6 +201,8 @@ public class AccountListActivity extends BaseActivity implements IJSONNetworkAct
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
+            public final TextView mCurrencyView;
+
             public Account mItem;
 
             public ViewHolder(View view) {
@@ -198,11 +210,12 @@ public class AccountListActivity extends BaseActivity implements IJSONNetworkAct
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mCurrencyView = (TextView) view.findViewById(R.id.currency);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mContentView.getText() + mCurrencyView.getText() + "'";
             }
         }
     }

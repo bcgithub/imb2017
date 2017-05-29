@@ -34,7 +34,7 @@ public class AccountDetailActivity extends BaseActivity implements IJSONNetworkA
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Add a new account", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -57,7 +57,6 @@ public class AccountDetailActivity extends BaseActivity implements IJSONNetworkA
         if (savedInstanceState == null) {
             Long accountId = getIntent().getLongExtra(AccountDetailFragment.ARG_ITEM_ID, -1L);
             new JSONAsyncTask(Util.BASE_URL+ Util.URL_GET_ACCOUNTS+"/"+accountId, this, 0).execute();
-
         }
     }
 
@@ -95,6 +94,7 @@ public class AccountDetailActivity extends BaseActivity implements IJSONNetworkA
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.account_detail_container, fragment)
                         .commit();
+
 
         }
     }
