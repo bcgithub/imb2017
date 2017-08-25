@@ -1,7 +1,7 @@
 package com.bergcomputers.bcibintegrationtest.rest;
 
 import static javax.ws.rs.client.Entity.json;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,8 +20,11 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 
 import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Customer;
 import com.bergcomputers.ejb.AccountController;
+import com.bergcomputers.ejb.CustomerController;
 import com.bergcomputers.ejb.IAccountController;
+import com.bergcomputers.ejb.ICustomerController;
 import com.bergcomputers.rest.account.AccountResource;
 
 public class AccountWSTest extends AbstractTest{
@@ -39,6 +42,8 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	
 	 @Inject
 	 private IAccountController accountContoller;
+	 @Inject
+	 private ICustomerController customerController;
 	 
 	 @Deployment
 		public static WebArchive createDeployment() {
@@ -84,6 +89,82 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			deleteAccount(created2.getId());
 
 		}
+		@Test
+//		@RunAsClient
+		public void getAccountsNoPaginationTest() {
+			Account created1 = createAccount();
+		//	Account created2 = createAccount();
+			Map<String, Object> params = new HashMap<>();
+	        params.put("page",-1);
+	        params.put("size", 1);
+	        try{
+			List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+			assertEquals(1, accounts.size());
+			assertEquals(created1.getId(), accounts.get(0).getId());
+	        }finally{
+			//Deleting test currency
+			deleteAccount(created1.getId());
+	        }
+
+		}
+		@Test
+//		@RunAsClient
+		public void getAccountsNullPaginationTest() {
+			Account created1 = createAccount();
+		//	Account created2 = createAccount();
+			Map<String, Object> params = new HashMap<>();
+	        params.put("page",null);
+	        params.put("size", 1);
+	        try{
+			List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+			assertEquals(1, accounts.size());
+			assertEquals(created1.getId(), accounts.get(0).getId());
+	        }finally{
+			//Deleting test currency
+			deleteAccount(created1.getId());
+	        }
+
+		}
+		@Test
+	//	@RunAsClient
+		public void getAccountsNoSizePaginationTest() {
+			Account created1 = createAccount();
+		//	Account created2 = createAccount();
+			Map<String, Object> params = new HashMap<>();
+	        params.put("page", 1);
+	        params.put("size", -1);
+	        
+			List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+			try{
+			assertEquals(1, accounts.size());
+			assertEquals(created1.getId(), accounts.get(0).getId());
+			}finally{
+			//Deleting test currency
+			deleteAccount(created1.getId());
+
+			}
+
+		}
+		@Test
+		//	@RunAsClient
+			public void getAccountsNullSizePaginationTest() {
+				Account created1 = createAccount();
+			//	Account created2 = createAccount();
+				Map<String, Object> params = new HashMap<>();
+		        params.put("page", 1);
+		       // params.put("size", null);
+		        
+				List<Account> accounts = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+				try{
+				assertEquals(1, accounts.size());
+				assertEquals(created1.getId(), accounts.get(0).getId());
+				}finally{
+				//Deleting test currency
+				deleteAccount(created1.getId());
+
+				}
+
+			}
 		
 		/**
 		 * Test if an account is created
@@ -100,7 +181,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			Response resp = target(serviceRelativePath).post(json(account));
 			Account created = resp.readEntity(Account.class);
 
-			//Getting list of currencies
+			//Getting list of accounts
 			List<Account> accountsNewList = getAccounts();
 			
 			//check the list size to be increased by one
@@ -115,7 +196,47 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			
 
 		}
+		@Test
+		//@RunAsClient
+		public void createAccountNullTest() {
+					
+			//Creating test account
+			Account account =null;
+			try{
+				accountContoller.create(account);			
+				fail("If ex not thrown should fail");
+			}catch(Exception e){
+				
+			}
+		}
 		
+		@Test
+		@RunAsClient
+		public void createAccountNullCreationDateTest() {
+					
+			//existing currencies
+			List<Account> accounts = getAccounts();
+
+			//Creating test account
+			Account account = createAccountNullCreationDateEntity();
+			Response resp = target(serviceRelativePath).post(json(account));
+			Account created = resp.readEntity(Account.class);
+
+			//Getting list of accounts
+			List<Account> accountsNewList = getAccounts();
+			
+			//check the list size to be increased by one
+			assertEquals(accounts.size() +1, accountsNewList.size() );
+	
+			assertEquals(account.getIban(), created.getIban());
+			assertEquals(account.getAmount(), created.getAmount());
+			assertNotNull(created.getCreationDate());
+		
+			//Deleting test account
+			deleteAccount((accountsNewList.get(0).getId()));
+			
+
+		}
 		/**
 		 * Test if an account can be obtained by its id
 		 */
@@ -170,6 +291,37 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			deleteAccount(account.getId());
 
 		}
+		
+		@Test
+		//@RunAsClient
+		public void getAccountForCustomerTest(){
+			Date newCreation = new Date();
+			String newIban="IBAN1278DE";
+			Double newAmount=3.0d;
+			
+			//Creating test customer
+			Customer customer=new Customer();
+			customer.setCreationDate(newCreation);
+			customer.setDeleted(0);
+			customer.setId((long) 1234);
+			customer = customerController.create(customer);
+		
+			Account account = createAccountEntity();
+			account.setCustomer(customer);
+			
+			Response resp = target(serviceRelativePath).put(json(account));
+			Account accounts = resp.readEntity(Account.class);
+			
+			
+			assertEquals(account.getId(), accounts.getId());
+			assertEquals(newIban,accounts.getIban());
+			assertEquals(newAmount, accounts.getAmount());
+			assertEquals(newCreation, accounts.getCreationDate());
+			
+			deleteAccount(account.getId());
+			customerController.delete(customer.getId());
+						
+		} 
 		
 		/**
 		 *	Test if an account is deleted 
@@ -229,6 +381,15 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			return account;
 		}
 		
+		private Account createAccountNullCreationDateEntity(){
+			Account account = new Account();
+			account.setAmount(amount);
+			account.setIban(iban);
+			account.setCreationDate(null);
+			return account;
+		}
+		
+		
 		/**
 		 * 
 		 * @return the created entity in the database
@@ -256,4 +417,6 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		private void deleteAccount(Long id){
 			target(serviceRelativePath + id).delete();
 		}
+		
+
 }

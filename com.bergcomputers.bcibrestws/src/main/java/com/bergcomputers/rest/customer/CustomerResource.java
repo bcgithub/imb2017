@@ -80,7 +80,7 @@ public class CustomerResource extends AbstractResource {
     @DELETE
     @Path("/{customerid}")
     @Produces("application/json")
-    public Response deleteAccounts(@PathParam("customerid") Long currencyid){
+    public Response deleteCustomer(@PathParam("customerid") Long currencyid){
     	customerController.delete(currencyid);
     	return Response.status(Response.Status.OK).build();
     }

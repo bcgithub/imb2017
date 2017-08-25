@@ -10,6 +10,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
 import com.bergcomputers.domain.Account;
+import com.bergcomputers.domain.Customer;
+
 
 @Stateless
 public class AccountController extends AbstractController<Account,Long> implements IAccountController{
@@ -67,5 +69,10 @@ public class AccountController extends AbstractController<Account,Long> implemen
 	@Override
 	public Account update(Account account) {
 		return getEntityManager().merge(account);
+	}
+	
+	@Override
+	public List<Account>  getAccountForCustomer(long customerid){
+		return getEntityManager().createQuery("select c from Account c where c.customer.id="+customerid).getResultList();
 	}
 }

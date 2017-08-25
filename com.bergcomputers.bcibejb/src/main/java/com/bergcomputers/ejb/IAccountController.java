@@ -17,5 +17,7 @@ public interface IAccountController {
 	
 	Account update(Account account);
 	
+	List<Account> getAccountForCustomer(long customerid);
+	
 	int count();
 }
