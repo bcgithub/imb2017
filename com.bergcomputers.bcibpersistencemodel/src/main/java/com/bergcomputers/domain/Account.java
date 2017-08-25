@@ -46,6 +46,11 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 	@JoinColumn(name="CURRENCYID")
 	private Currency currency;
 
+
+	public Account() {
+		super();
+	}
+
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -54,9 +59,6 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 		this.customer = customer;
 	}
 
-	public Account() {
-		super();
-	}
 	/* (non-Javadoc)
 	 * @see com.bergcomputers.domain.IAccount#getId()
 	 */
@@ -122,7 +124,8 @@ public class Account extends BaseEntity implements Serializable, IAccount {
 
 	@Override
 	public String toString() {
-		return "Account [id="+getId()+", iban=" + iban + ", amount=" + amount + ", version=" + getVersion() + ", creationDate=" + getCreationDate() + "]";
+		return "Account [id=" + getId() + ", creationDate=" + getCreationDate() + ", version=" + getVersion() + ", deleted=" + getDeleted()
+				+ ", iban=" + iban + ", amount=" + amount + ", customer=" + customer + ", currency=" + currency + "]";
 	}
 
 	public Currency getCurrency() {

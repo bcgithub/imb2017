@@ -1,7 +1,7 @@
 package com.bergcomputers.domain;
 
 
-public interface IAccount {
+public interface IAccount extends IBaseEntity{
 	public static final String id = new String("id");
 	public static final String amount = new String("amount");
 	public static final String creationDate = new String("creationDate");

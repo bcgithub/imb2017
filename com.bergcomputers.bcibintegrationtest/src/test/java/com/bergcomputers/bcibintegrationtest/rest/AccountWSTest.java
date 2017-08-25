@@ -340,7 +340,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 			account.setCustomer(customer);
 			account.setCurrency(currency);
 			
-			Response resp = target(serviceRelativePath).put(json(account));
+			Response resp = target(serviceRelativePath).post(json(account));
 			Account accounts = resp.readEntity(Account.class);
 			
 			
