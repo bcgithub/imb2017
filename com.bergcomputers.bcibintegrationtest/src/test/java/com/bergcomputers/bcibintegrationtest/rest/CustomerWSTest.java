@@ -95,24 +95,22 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		List<Customer> customers = getCustomers();
 
 		//Creating test currency
-		Customer customer = createCustomer();
-		Response resp = target(serviceRelativePath).post(json(customer));
-		Customer created = resp.readEntity(Customer.class);
+		Customer created = createCustomer();
 
 		//Getting list of currencies
 		List<Customer> customersNewList = getCustomers();
 		
 		//check the list size to be increased by one
-		assertEquals(customers.size() +2, customersNewList.size() );
+		assertEquals(customers.size() +1, customersNewList.size() );
 		
-		assertEquals(customer.getFirstName(), created.getFirstName());
-		assertEquals(customer.getLastName(), created.getLastName());
-		assertEquals(customer.getLogin(), created.getLogin());
-		assertEquals(customer.getPassword(), created.getPassword());
-		assertEquals(customer.getCreationDate(), created.getCreationDate());
+		assertEquals(firstName, created.getFirstName());
+		assertEquals(lastName, created.getLastName());
+		assertEquals(login, created.getLogin());
+		assertEquals(password, created.getPassword());
+		assertEquals(creationDate, created.getCreationDate());
 		
 		//Deleting test currency
-		deleteCustomer(customersNewList.get(0).getId());
+		deleteCustomer(created.getId());
 
 	}
 	
@@ -121,18 +119,16 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	public void getCustomerTest() {
 				
 		//Creating test customer
-		Customer customer = createCustomer();
-		Response resp = target(serviceRelativePath).post(json(customer));
-		Customer created = resp.readEntity(Customer.class);
+		Customer created = createCustomer();
 		
-		resp = target(serviceRelativePath+created.getId()).get();
+		Response resp = target(serviceRelativePath+created.getId()).get();
 		Customer obtained = resp.readEntity(Customer.class);
 		
 		assertEquals(obtained.getId(), created.getId());
-		assertEquals(customer.getFirstName(), created.getFirstName());
-		assertEquals(customer.getLastName(), created.getLastName());
-		assertEquals(customer.getLogin(), created.getLogin());
-		assertEquals(customer.getPassword(), created.getPassword());
+		assertEquals(obtained.getFirstName(), created.getFirstName());
+		assertEquals(obtained.getLastName(), created.getLastName());
+		assertEquals(obtained.getLogin(), created.getLogin());
+		assertEquals(obtained.getPassword(), created.getPassword());
 		assertEquals(obtained.getCreationDate(), created.getCreationDate());
 		
 		//Deleting test customer
@@ -222,9 +218,9 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	private Customer createOtherCustomerEntity(){
 		Customer customer = new Customer();
 		customer.setFirstName("OtherCustomer");
-		customer.setLastName(lastName);
-		customer.setLogin(login);
-		customer.setPassword(password);
+		customer.setLastName("OtherLastName");
+		customer.setLogin("OtherLogin");
+		customer.setPassword("OtherPwd");
 		customer.setCreationDate(creationDate);
 		return customer;
 	}	
@@ -250,9 +246,9 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		assertEquals(1, customers.size());
 		assertEquals(created1.getFirstName(), customers.get(0).getFirstName());
         params.put("page", 2);
-        customers = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
-		assertEquals(1, customers.size());
-		assertEquals(created2.getFirstName(), customers.get(0).getFirstName());
+        List<Customer> customers2 = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, customers2.size());
+		assertEquals(created2.getFirstName(), customers2.get(0).getFirstName());
 		
 		//Deleting test currency
 		deleteCustomer(created1.getId());

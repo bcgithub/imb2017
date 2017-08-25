@@ -168,13 +168,13 @@ public class BeneficiaryWSTest extends AbstractTest {
 		Beneficiary created1 = createBeneficiary();
 		Beneficiary created2 = createBeneficiary();
 		Map<String, Object> params = new HashMap<>();
-		params.put("page", 1);	//fara 1
-		params.put("size", -1);	// fara 2 , //cu -1 dar si la page
-
+		params.put("page", 1);	
+		params.put("size", -1);	//return all
 		List<Beneficiary> beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
-		assertEquals(1, beneficiaries.size());
+		assertEquals(2, beneficiaries.size());
 		assertEquals(created1.getId(), beneficiaries.get(0).getId());
 		params.put("page", 2);
+		params.put("size", 1);
 		beneficiaries = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
 		assertEquals(1, beneficiaries.size());
 		assertEquals(created2.getId(), beneficiaries.get(0).getId());

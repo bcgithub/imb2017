@@ -60,6 +60,6 @@ public class RoleEjbTest {
     public void findOneRoleUsingJpqlQuery() throws Exception {
     	Role result = roleController.find(1L);
    	    assertNotNull(result);
-    	assertEquals("RoleName", result.getName());
+    	assertEquals("Employee", result.getName());
     }
 }

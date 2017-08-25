@@ -31,33 +31,33 @@ import com.bergcomputers.ejb.IAccountController;
 @PersistenceTest
 @Transactional(TransactionMode.ROLLBACK)
 public class AccountEjbTest {
-	
+
 	@EJB
 	private IAccountController accountController;
-	
+
 	@Deployment
-    public static Archive<?> createDeployment() {
-        return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addPackage(Account.class.getPackage())
-            .addPackage(AccountController.class.getPackage())
-            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-    }
+	public static Archive<?> createDeployment() {
+		return ShrinkWrap.create(WebArchive.class, "test.war").addPackage(Account.class.getPackage())
+				.addPackage(AccountController.class.getPackage())
+				.addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+	}
 
-	 @Before
-	    public void preparePersistenceTest() throws Exception {
-	    }
-	    @After
-	    public void commitTransaction() throws Exception {
-	    }
-	    
+	@Before
+	public void preparePersistenceTest() throws Exception {
+	}
 
-	    @Test
-	 
-	    public void findOneAccountUsingJpqlQuery() throws Exception {
-	    Account result = accountController.find(1L);
-	   	assertNotNull(result);
-	   	assertEquals("IBAN12378DE", result.getIban());
-	   	assertEquals(new Double(4.0), result.getAmount());
-	    }
+	@After
+	public void commitTransaction() throws Exception {
+	}
+
+	@Test
+	@UsingDataSet("datasets/TwoAccounts.xml")
+	@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.USED_TABLES_ONLY)
+	public void findOneAccountUsingJpqlQuery() throws Exception {
+		Account result = accountController.find(1L);
+		assertNotNull(result);
+		assertEquals("IBAN12378DE", result.getIban());
+		assertEquals(new Double(100.0), result.getAmount());
+	}
 }

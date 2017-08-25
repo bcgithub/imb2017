@@ -58,13 +58,13 @@ public class DeviceEjbTest {
 
 
     @Test
-    @UsingDataSet("datasets/TwoCurrencies.xml")
+    @UsingDataSet("datasets/TwoDevices.xml")
     @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.USED_TABLES_ONLY)
     public void findOneDeviceUsingJpqlQuery() throws Exception {
     	Device result = deviceController.find(1L);
    	    assertNotNull(result);
     	assertEquals("DeviceName", result.getName());
- 	    assertEquals("DeviceID", result.getDeviceId());
+ 	    assertEquals(1, result.getDeviceId());
     }
 	
 }

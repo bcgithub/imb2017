@@ -55,15 +55,15 @@ public void commitTransaction() throws Exception {
 }
 
 @Test
-@UsingDataSet("datasets/TwoCurrencies.xml")
+@UsingDataSet("datasets/TwoCustomers.xml")
 @Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.USED_TABLES_ONLY)
 public void findOneCustomerUsingJpqlQuery() throws Exception {
 	Customer result = customerController.find(1L);
 	    assertNotNull(result);
-	assertEquals(toString(), result.getFirstName());
-	assertEquals(toString(), result.getLastName());
-	assertEquals(toString(), result.getLogin());
-	assertEquals(toString(), result.getPassword());
+	assertEquals("John", result.getFirstName());
+	assertEquals("Doe", result.getLastName());
+	assertEquals("jdoe", result.getLogin());
+	assertEquals("jdow", result.getPassword());
 }
 
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <baseentity id="1" dtype="Account" creationDate="2017-01-01"/>
+    <baseentity id="2" dtype="Account" creationDate="2017-01-02"/>
+	<account id="1" iban="IBAN12378DE" amount="100.0" />
+	<account id="2" iban="IBAN22378DE" amount="200.0" />
+ </dataset>

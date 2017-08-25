@@ -134,8 +134,8 @@ public class AccountResource extends AbstractResource{
     @Path("/")
     public Response updateAccount(Account account) throws URISyntaxException {
         log.debug("REST request to update Account : " + account);
-        accountController.update(account);
-        return HeaderUtil.createEntityUpdateAlert(Response.ok(), "account",account.getId().toString())
-                .entity(account).build();
+        Account updaccount = accountController.update(account);
+        return HeaderUtil.createEntityUpdateAlert(Response.ok(), "account",updaccount.getId().toString())
+                .entity(updaccount).build();
     }
 }

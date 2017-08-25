@@ -64,8 +64,8 @@ public class CustomerResource extends AbstractResource {
     @Produces("application/json")
     @Path("/")
     
-    public Response findCurrenciesRange(@QueryParam(PAGE_PARAM) Integer page, @QueryParam(SIZE_PARAM) Integer size) throws URISyntaxException {
-        log.debug("REST request to get all Cus");
+    public Response findCustomersRange(@QueryParam(PAGE_PARAM) Integer page, @QueryParam(SIZE_PARAM) Integer size) throws URISyntaxException {
+        log.debug("REST request to get all Customers");
         List<Customer> customers = new ArrayList<Customer>();
         if (null != page && page > 0 && null != size && size > 0){
         	customers = customerController.findRange((page -1) * size, size);
@@ -73,7 +73,7 @@ public class CustomerResource extends AbstractResource {
         	customers = customerController.findAll();
         }
         ResponseBuilder builder = Response.ok(customers);
-        PaginationUtil.generatePaginationHttpHeaders(builder, new Page(null == page? 1:page, size == null ? -1:size, customerController.count()), "/resources/currency");
+        PaginationUtil.generatePaginationHttpHeaders(builder, new Page(null == page? 1:page, size == null ? -1:size, customerController.count()), "/resources/customer");
         return builder.build();
     }
     

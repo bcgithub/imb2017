@@ -124,7 +124,7 @@ public class TransactionWSTest extends AbstractTest
 	 * Test if a transaction is created
 	 */
 	@Test
-	@RunAsClient
+	//@RunAsClient
 	public void createTransactionTest() {
 				
 		//existing transactions
@@ -159,7 +159,7 @@ public class TransactionWSTest extends AbstractTest
 	 * Test if a transaction can be obtained by its id
 	 */
 	@Test
-	@RunAsClient
+	//@RunAsClient
 	public void getTransactionTest() {
 				
 		//Creating test transaction
@@ -191,22 +191,25 @@ public class TransactionWSTest extends AbstractTest
 	 * Test if a transaction is updated 
 	 */
 	@Test
-	@RunAsClient
+	//@RunAsClient
 	public void updateTransactionTest() {
-		
-		Date newCreation = new Date();
-		Account newAccount = new Account();
 		String newType = "newType";
 		Double newAmount = 10.0;
 		String newSender = "newSender";
 		String newDetails = "newDetails";
 		String newStatus = "newStatus";
+		Date newCreation = new Date();
+
+		Account newAccount = new Account();
+		newAccount.setAmount(1000.0);
+		newAccount.setIban("1234567890");
+		newAccount.setCreationDate(newCreation);
+		
 		
 		//Creating test transaction
 		Transaction transaction = createTransaction();
 		
 		transaction.setDate(newCreation);
-		transaction.setAccount(newAccount);
 		transaction.setTransactionDate(newCreation);
 		transaction.setTransactionType(newType);
 		transaction.setAmount(newAmount);
@@ -215,6 +218,13 @@ public class TransactionWSTest extends AbstractTest
 		transaction.setStatus(newStatus);
 		transaction.setCreationDate(newCreation);
 		
+		newAccount.setCurrency(transaction.getAccount().getCurrency());
+		newAccount.setCustomer(transaction.getAccount().getCustomer());
+		
+		newAccount = accountController.create(newAccount);
+		Account oldAccount = transaction.getAccount();
+		transaction.setAccount(newAccount);
+
 		Response resp = target(serviceRelativePath).put(json(transaction));
 		Transaction updated = resp.readEntity(Transaction.class);
 		
@@ -228,8 +238,11 @@ public class TransactionWSTest extends AbstractTest
 		assertEquals(newStatus, updated.getStatus());
 		assertEquals(newCreation, updated.getCreationDate());
 		
-		//Deleting test transaction
-		deleteTransaction(transaction.getId());
+		transactionController.delete(updated.getId());
+		accountController.delete(newAccount.getId());
+		deleteDefaultTransaction();
+		
+		
 
 	}
 	
@@ -238,7 +251,7 @@ public class TransactionWSTest extends AbstractTest
 	 * 
 	 */
 	@Test
-	@RunAsClient
+	//@RunAsClient
 	public void deleteTransactionTest() {
 		// Creating test transaction
 		createTransaction();
@@ -344,10 +357,10 @@ public class TransactionWSTest extends AbstractTest
 	 */
 	private void deleteDefaultTransaction()
 	{
-		accountController.delete(defaultID);
-		customerController.delete(defaultID);
-		roleController.delete(defaultID);
-		currencyController.delete(defaultID);
+		accountController.delete(defaultAccount.getId());
+		customerController.delete(defaultCustomer.getId());
+		roleController.delete(defaultRole.getId());
+		currencyController.delete(defaultCurrency.getId());
 	}
 	
 	/**

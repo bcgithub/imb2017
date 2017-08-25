@@ -23,6 +23,8 @@
             <property name="javax.persistence.query.timeout" value="10"/>
             <property name="javax.persistence.lock.timeout" value="10"/>
             <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+           <!--  UNCOMMENT THIS TO SEE THE FULL PERSISTENCE LOG AND SQLS
+           <property name="eclipselink.logging.logger" value="DefaultLogger"/> -->
         </properties>
     </persistence-unit>
 <!--  <persistence-unit name="itemDataBase" transaction-type="JTA">

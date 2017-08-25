@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <baseentity id="1" dtype="Customer" creationDate="2017-01-01"/>
+    <baseentity id="2" dtype="Customer" creationDate="2017-01-02"/>
+	<customer id="1" firstName="John" lastName="Doe" login="jdoe" password="jdow" />
+	<customer id="2" firstName="Alex" lastName="Mit" login="amit" password="ami" />
+ </dataset>

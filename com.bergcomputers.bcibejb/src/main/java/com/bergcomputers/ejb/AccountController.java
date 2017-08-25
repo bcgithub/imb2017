@@ -68,7 +68,9 @@ public class AccountController extends AbstractController<Account,Long> implemen
 
 	@Override
 	public Account update(Account account) {
-		return getEntityManager().merge(account);
+		Account ret = getEntityManager().merge(account);
+		getEntityManager().flush();
+		return ret;
 	}
 	
 	@Override
