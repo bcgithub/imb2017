@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CURRENCY")
 @XmlRootElement
-@NamedQuery(name=Currency.findAll,query="SELECT c from Currency c")
+@NamedQuery(name=Currency.findAllCurrency,query="SELECT c from Currency c")
 public class Currency extends BaseEntity implements Serializable, ICurrency{
-	public final static String findAll = "com.bergcomputers.currency.findAll";
+	public final static String findAllCurrency = "com.bergcomputers.currency.findAll";
 
 	@NotNull
 	private String symbol;

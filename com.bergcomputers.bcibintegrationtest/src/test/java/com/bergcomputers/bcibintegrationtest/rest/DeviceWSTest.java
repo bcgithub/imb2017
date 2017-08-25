@@ -7,7 +7,7 @@ package com.bergcomputers.bcibintegrationtest.rest;
  */
 
 import static javax.ws.rs.client.Entity.json;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +26,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 
 import com.bergcomputers.domain.Device;
+import com.bergcomputers.domain.Role;
 import com.bergcomputers.ejb.DeviceControler;
 import com.bergcomputers.ejb.IDeviceController;
 import com.bergcomputers.rest.device.DeviceResource;
@@ -181,7 +182,7 @@ public class DeviceWSTest extends AbstractTest {
 		deleteDevice(device.getId());
 
 	}
-//DE aici modific	
+
 	/**
 	 *	Test if a device is deleted 
 	 * 
@@ -246,5 +247,155 @@ public class DeviceWSTest extends AbstractTest {
 	 */
 	private void deleteDevice(Long id){
 		target(serviceRelativePath + id).delete();
+	}
+	
+	@Test
+	@RunAsClient
+	public void createDeviceTestNoCreationDate() {
+				
+		//existing devices
+		List<Device> devices = getDevices();
+
+		//Creating test device
+		Device device = createDeviceEntity();
+		device.setCreationDate(null);
+		Response resp = target(serviceRelativePath).post(json(device));
+		Device created = resp.readEntity(Device.class);
+
+		//Getting list of currencies
+		List<Device> devicesNewList = getDevices();
+		
+		//check the list size to be increased by one
+		assertEquals(devices.size() +1, devicesNewList.size() );
+		
+		assertEquals(device.getName(), created.getName());
+		assertEquals(device.getDeviceId(), created.getDeviceId());
+		assertNotNull(created.getCreationDate());
+		
+		//Deleting test Device
+		deleteDevice(devicesNewList.get(0).getId());
+
+	}
+	
+	@Test
+	@RunAsClient
+	public void deleteDeviceTestNoId() {
+		// Creating test device
+	//	createDevice();
+		
+		// existing devices
+		List<Device> devices = getDevices();
+		
+		
+		//delete test device
+		target(serviceRelativePath + "-1").delete();
+
+		
+		// new currencies list
+		List<Device> devicesNewList = getDevices();
+		
+		//check the list size to be decrease by one
+		assertEquals(devices.size(), devicesNewList.size() );
+
+	}
+	
+	@Test
+//	@RunAsClient
+	public void deleteDeviceNullTest() {
+		// Creating test device
+		Device device = null;
+		
+		try{
+			deviceController.create(device);
+			fail("If ex not thrown should fail");
+			}
+		catch(Exception e){
+					
+			}
+
+	}
+	
+	
+	@Test
+
+//	@RunAsClient
+	public void getDevicesPaginationTestPageNull() {
+		Device created1 = createDevice();
+		Device created2 = createDevice();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", null);
+        params.put("size", 1);
+        
+		List<Device> devices = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		try{
+			assertEquals(2, devices.size());
+			assertEquals(created1.getId(), devices.get(0).getId());
+		}finally{
+			//Deleting test currency
+			deleteDevice(created1.getId());
+			deleteDevice(created2.getId());
+		}
+	}
+	
+	@Test
+
+//	@RunAsClient
+	public void getDevicesPaginationTestSizeNull() {
+		Device created1 = createDevice();
+		Device created2 = createDevice();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", 1);
+        
+		List<Device> devices = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		try{
+			assertEquals(2, devices.size());
+			assertEquals(created1.getId(), devices.get(0).getId());
+		}finally{
+			//Deleting test currency
+			deleteDevice(created1.getId());
+			deleteDevice(created2.getId());
+		}
+	}
+	
+	@Test
+
+//	@RunAsClient
+	public void getDevicesPaginationTestSizeMin() {
+		Device created1 = createDevice();
+		Device created2 = createDevice();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", 1);
+        params.put("size", -5);
+        
+		List<Device> devices = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		try{
+			assertEquals(2, devices.size());
+			assertEquals(created1.getId(), devices.get(0).getId());
+		}finally{
+			//Deleting test currency
+			deleteDevice(created1.getId());
+			deleteDevice(created2.getId());
+		}
+	}
+	
+	@Test
+
+//	@RunAsClient
+	public void getDevicesPaginationTestPageMin() {
+		Device created1 = createDevice();
+		Device created2 = createDevice();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", -5);
+        params.put("size", 1);
+        
+		List<Device> devices = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		try{
+			assertEquals(2, devices.size());
+			assertEquals(created1.getId(), devices.get(0).getId());
+		}finally{
+			//Deleting test currency
+			deleteDevice(created1.getId());
+			deleteDevice(created2.getId());
+		}
 	}
 }

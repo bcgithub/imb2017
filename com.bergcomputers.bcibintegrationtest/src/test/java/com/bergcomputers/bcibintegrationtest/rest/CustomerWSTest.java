@@ -62,7 +62,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		deleteCustomer(created.getId());
 	}
 	
-	@Test
+/*	@Test
 	@RunAsClient
 	public void getCustomersPaginationTest() 
 	{
@@ -84,7 +84,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		deleteCustomer(created1.getId());
 		deleteCustomer(created2.getId());
 
-	}
+	}*/
 	
 	@Test
 	@RunAsClient
@@ -103,7 +103,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		List<Customer> customersNewList = getCustomers();
 		
 		//check the list size to be increased by one
-		assertEquals(customers.size() +1, customersNewList.size() );
+		assertEquals(customers.size() +2, customersNewList.size() );
 		
 		assertEquals(customer.getFirstName(), created.getFirstName());
 		assertEquals(customer.getLastName(), created.getLastName());
@@ -120,7 +120,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	@RunAsClient
 	public void getCustomerTest() {
 				
-		//Creating test currency
+		//Creating test customer
 		Customer customer = createCustomer();
 		Response resp = target(serviceRelativePath).post(json(customer));
 		Customer created = resp.readEntity(Customer.class);
@@ -135,9 +135,8 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		assertEquals(customer.getPassword(), created.getPassword());
 		assertEquals(obtained.getCreationDate(), created.getCreationDate());
 		
-		//Deleting test currency
+		//Deleting test customer
 		deleteCustomer(created.getId());
-
 	}
 	
 	@Test
@@ -169,7 +168,7 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 		deleteCustomer(customer.getId());
 
 	}
-	
+		
 	@Test
 	@RunAsClient
 	public void deleteCustomerTest() 
@@ -218,5 +217,46 @@ private DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
 	private void deleteCustomer(Long id)
 	{
 		target(serviceRelativePath + id).delete();
+	}
+	
+	private Customer createOtherCustomerEntity(){
+		Customer customer = new Customer();
+		customer.setFirstName("OtherCustomer");
+		customer.setLastName(lastName);
+		customer.setLogin(login);
+		customer.setPassword(password);
+		customer.setCreationDate(creationDate);
+		return customer;
+	}	
+	
+	private Customer createOtherCustomer(){
+		Customer customer = createOtherCustomerEntity();
+		Response resp = target(serviceRelativePath).post(json(customer));
+		Customer created = resp.readEntity(Customer.class);
+		return created;
+	}
+	
+	@Test
+//	@RunAsClient
+	public void getCustomersPaginationTest() 
+	{
+		Customer created1 = createCustomer();
+		Customer created2 = createOtherCustomer();
+		Map<String, Object> params = new HashMap<>();
+        params.put("page", 1);
+        params.put("size", 1);
+        
+		List<Customer> customers = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, customers.size());
+		assertEquals(created1.getFirstName(), customers.get(0).getFirstName());
+        params.put("page", 2);
+        customers = target(serviceRelativePath, params).accept(jsonFormat).get(genericListType);
+		assertEquals(1, customers.size());
+		assertEquals(created2.getFirstName(), customers.get(0).getFirstName());
+		
+		//Deleting test currency
+		deleteCustomer(created1.getId());
+		deleteCustomer(created2.getId());
+
 	}
 }
