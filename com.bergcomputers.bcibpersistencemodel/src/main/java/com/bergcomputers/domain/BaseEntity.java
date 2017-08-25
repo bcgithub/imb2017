@@ -45,7 +45,7 @@ public class BaseEntity implements Serializable, IBaseEntity {
 
 	protected int deleted;
 
-    //@NotNull
+   // @NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date creationDate;
 
